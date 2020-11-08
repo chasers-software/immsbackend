@@ -62,24 +62,14 @@ exports.assignMarks=async(req,res,next)=>{
             let input=[];
             pool.execute('SELECT username FROM marks WHERE username=? AND subject_code=?',[mark.username,subject_code]).then(
                 data=>{
-                    if (data[0].length==0){
-                        input=[mark.username,subject_code,mark.test,mark.practical];
-                        pool.execute('INSERT INTO marks(username,subject_code,theory_marks,practical_marks) values(?,?,?,?)',input).then(
-                            data=>{
-                                console.log("Inserted");
-                            })
-                            .catch(err=>console.log(err));    
-                    }else
-                    {
-                        console.log("record");
-                        input=[mark.test,mark.practical,mark.username,subject_code];
-                        console.log(input);
-                        pool.execute('UPDATE marks SET theory_marks=?,practical_marks=? where username=? and subject_code=?',input)
-                        .then(data=>{
-                            console.log("updated");
-                        })
-                        .catch(err=>console.log(err));
-                    }
+                    console.log("record");
+                    input=[mark.test,mark.practical,mark.username,subject_code];
+                    console.log(input);
+                    pool.execute('UPDATE marks SET theory_marks=?,practical_marks=? where username=? and subject_code=?',input)
+                    .then(data=>{
+                        console.log("updated");
+                    })
+                    .catch(err=>console.log(err));
                 }
             )
 
@@ -110,6 +100,18 @@ exports.getMarks=async(req,res,next)=>{
             status:'success',
             data:result[0]
         })
+
+    }catch(err){
+        console.log(err);
+    }
+}
+
+exports.getSemMarks=async(req,res,next)=>{
+    try{
+        const {username,semester}=req.params;
+        const result=(await pool.execute(
+            'SELECT marks'
+        ))
 
     }catch(err){
         console.log(err);
