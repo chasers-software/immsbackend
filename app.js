@@ -30,7 +30,7 @@ app.use('/api',limiter);
 app.use(express.json({limit:'10kb'}));
 app.use(xss());
 app.use(hpp());
-
+app.use(cors());
 
 app.use('/api/subject',subjectRouter);
 app.use('/class',classRouter);
