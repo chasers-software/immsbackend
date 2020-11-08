@@ -30,7 +30,9 @@ const addStudent=(data,group)=>{
     const student=[username,section_code,program_code];
     pool.execute('INSERT INTO person(username,password,full_name,role,active) values(?,?,?,?,?)',person).then(
         data=>{
-            pool.execute('INSERT INTO student(username,section_code,program_code) values(?,?,?)',student).then(data=>console.log(data)).catch(err=>console.log(err));
+            pool.execute('INSERT INTO student(username,section_code,program_code) values(?,?,?)',student).then(data=>{
+
+            }).catch(err=>console.log(err));
         }
     ).catch(err=>console.log(err));
     
@@ -51,4 +53,25 @@ const fetcher=async (batch,program,group)=>{
         console.log(err);
     }
 };
-fetcher('074','BCT','B');
+const fillMarks=async (section_code)=>{
+    try{
+        const result=await pool.execute('SELECT username from student WHERE section_code=?',[section_code]);
+        const program_code=section_code.substr(3,3);
+        const subjectInPrograms=(await pool.execute('SELECT subject_code,semester FROM subject_in_program where program_code=?',[program_code]))[0];
+        const students=result[0];
+        console.log(students);
+        for (student of students)
+        {
+            for(subject of subjectInPrograms)
+            {
+              const params=[student.username,subject.subject_code,0,0,subject.semester];
+              pool.execute('INSERT INTO marks(username,subject_code,theory_marks,practical_marks,semester) VALUES(?,?,?,?,?)',params).then(
+                data=>{}
+            ).catch(err=>console.log(err));
+            }
+        }
+    }catch(err){
+        console.log(err);
+    }
+}
+fillMarks("074BCTAB","CE")
