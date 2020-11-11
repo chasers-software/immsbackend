@@ -12,6 +12,7 @@ const globalErrorHandler=require('./controllers/errorController');
 
 const subjectRouter=require('./routes/subectRoutes');
 const classRouter=require('./routes/classRoutes');
+const marksRouter=require('./routes/marksRoutes')
 
 const app=express();
 
@@ -33,7 +34,8 @@ app.use(hpp());
 app.use(cors());
 
 app.use('/api/subject',subjectRouter);
-app.use('/class',classRouter);
+app.use('/api/class',classRouter);
+app.use('/api/marks',marksRouter);
 
 app.use(globalErrorHandler);
 module.exports=app;

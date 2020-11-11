@@ -28,18 +28,23 @@ const createSendToken=(user,statusCode,req,res)=>{
     });
 };
 
-exports.login=catchAsync(async(req,res,next)=>{
+exports.login=async(req,res,next)=>{
+    try{
     const {username,password}=req.body;
-
     if (!email || !password){
         return next(new AppError('Please provide email and password!',400));
     }
     const user={
         username:"tester"
     };
-
     createSendToken(user,200,req,res);
-})
+    }catch(err){
+        res.status(400).json({
+            status:'fail',
+            msg:'Wrong Username Or Password'
+        })
+    }
+}
 
 exports.logout=(req,res)=>{
     res.cookie('jwt','loggedout',{
