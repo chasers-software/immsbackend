@@ -23,7 +23,15 @@ exports.addSection=async (req,res,next)=>{
 };
 exports.getSection=async(req,res,next)=>{
     try{
-        //const result=(await pool.execute('SELECT ')
+        try{
+            const result=(await pool.execute('SELECT * FROM section'))[0];
+            res.status(200).json({
+                status:'success',
+                data:result
+            })
+        }catch(err){
+            
+        }
     }catch(err){
         res.status(400).json({
             status:'fail',

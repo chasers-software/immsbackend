@@ -37,7 +37,7 @@ app.use(cors());
 app.use('/api/subject',subjectRouter);
 app.use('/api/class',classRouter);
 app.use('/api/marks',marksRouter);
-app.use('/api/program');
+app.use('/api/program',programRouter);
 
 app.use(globalErrorHandler);
 module.exports=app;
