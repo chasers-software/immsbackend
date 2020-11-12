@@ -18,7 +18,9 @@ exports.addSection=async (req,res,next)=>{
             status:'success'
         })
     }catch(err){
-        console.log(err);
+        res.status(400).json({
+            status:'fail'
+        })
     }
 };
 exports.getSection=async(req,res,next)=>{
@@ -79,7 +81,10 @@ exports.getLectureClass=async(req,res,next)=>{
             data:results
         }) 
     }catch(err){
-        console.log(err);
+        return res.status(404).json({
+            status:'fail',
+            err:err
+        })
     }
 }
 
@@ -107,9 +112,12 @@ exports.addTeacher=async(req,res,next)=>{
 
             }).catch(err=>console.log(err));
         }
-    ).catch(err=>{
-        status:'fail'
-    });
+    ).catch(err){
+        return res.status(404).json({
+            status:'fail',
+            err:err
+        })
+    };
 }
 exports.getTeacher=async(req,res,next)=>{
     try{
@@ -119,6 +127,9 @@ exports.getTeacher=async(req,res,next)=>{
             data:result
         })
     }catch(err){
-        
+        return res.status(404).json({
+            status:'fail',
+            err:err
+        })
     }
 }
