@@ -38,16 +38,19 @@ exports.getMarks=async(req,res,next)=>{
             'From marks LEFT JOIN person ON marks.username=person.username '+
             'LEFT JOIN student on marks.username=student.username '+
             'WHERE student.section_code=? AND marks.subject_code=?',params);
-        // const result2=await pool.execute(
-        //     'SELECT theory_fm,prarctical_fm FROM subject WHERE subject_code=?',[subject_code]
-        // );
+        const result2=await pool.execute(
+            'SELECT theory_fm,practical_fm FROM subject WHERE subject_code=?',[subject_code]
+        );
         return res.status(200).json({
             status:'success',
-            data:result1[0]
+            data:result1[0],
+            full_fm:result2[0]
         })
 
     }catch(err){
-        console.log(err);
+        res.status(400).json({
+            status:'fail'
+        })
     }
 }
 
