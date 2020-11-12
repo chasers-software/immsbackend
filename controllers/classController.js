@@ -11,6 +11,16 @@ exports.addSection=async (req,res,next)=>{
         console.log(err);
     }
 };
+exports.getSection=async(req,res,next)=>{
+    try{
+        //const result=(await pool.execute('SELECT ')
+    }catch(err){
+        res.status(400).json({
+            status:'fail',
+            err:err
+        })
+    }
+}
 exports.getSectionStudents=async(req,res,next)=>{
     try{
         console.log(req.params);
@@ -42,6 +52,7 @@ exports.getSectionStudents=async(req,res,next)=>{
 
 exports.getLectureClass=async(req,res,next)=>{
     try{
+        console.log("abc");
         console.log(req.params);
         const {username}=req.params;
         const results=(await pool.execute('SELECT section_code,lecture.subject_code,title FROM lecture LEFT JOIN subject ON lecture.subject_code=subject.subject_code'))[0];

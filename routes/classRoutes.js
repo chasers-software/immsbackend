@@ -1,6 +1,6 @@
 const express= require('express');
 const classController=require('../controllers/classController');
-//const { route } = require('./subectRoutes');
+
 
 const router=express.Router();
 
