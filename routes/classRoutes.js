@@ -13,6 +13,7 @@ router
 router
     .route('/lecture/:username')
     .get(classController.getLectureClass);
-
-
+router
+    .route('/teacher/')
+    .post(classController.addTeacher);
 module.exports=router;

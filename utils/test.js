@@ -17,10 +17,11 @@ mark={
     username:"074BCT002"
 };
 subject_code="CE401";
-pool.execute('SELECT username FROM marks WHERE username=? AND subject_code=?',[mark.username,subject_code]).then(
-    data=>{
-        if (data[0].length==0){
+// pool.execute('SELECT username FROM marks WHERE username=? AND subject_code=?',[mark.username,subject_code]).then(
+//     data=>{
+//         if (data[0].length==0){
             
-        }
-    }
-)
+//         }
+//     }
+// )
+pool.execute('SELECT * FROM program').then(data=>console.log(data[0]));

@@ -33,14 +33,17 @@ exports.getMarks=async(req,res,next)=>{
         const {section_code,subject_code}=req.params;
         const params=[section_code,subject_code];
         console.log(params);
-        const result=await pool.execute(
+        const result1=await pool.execute(
             'SELECT marks.username,full_name,theory_marks,practical_marks '+
             'From marks LEFT JOIN person ON marks.username=person.username '+
             'LEFT JOIN student on marks.username=student.username '+
             'WHERE student.section_code=? AND marks.subject_code=?',params);
+        const result2=await pool.execute(
+            'SELECT theory_fm,prarctical_fm FROM subject WHERE subject_code=?',[subject_code]
+        );
         return res.status(200).json({
             status:'success',
-            data:result[0]
+            data:[result1[0],result2[0]]
         })
 
     }catch(err){

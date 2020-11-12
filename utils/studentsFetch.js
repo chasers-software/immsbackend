@@ -74,3 +74,4 @@ const fillMarks=async (section_code)=>{
         console.log(err);
     }
 }
+module.exports={fetcher,fillMarks};
