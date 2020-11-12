@@ -103,7 +103,8 @@ exports.addLecture=async(req,res,next)=>{
     }
 }
 exports.addTeacher=async(req,res,next)=>{
-    const {username,password,full_name}=req.body;
+    try{
+        const {username,password,full_name}=req.body;
     const params1=[username,password,full_name,1,1];
     const params2=[username]
     pool.execute('INSERT INTO person(username,password,full_name,role,active) values(?,?,?,?,?)',person).then(
@@ -112,12 +113,13 @@ exports.addTeacher=async(req,res,next)=>{
 
             }).catch(err=>console.log(err));
         }
-    ).catch(err){
+    ).catch(err=>console.log(err));
+    }catch(err){
         return res.status(404).json({
             status:'fail',
             err:err
         })
-    };
+    }
 }
 exports.getTeacher=async(req,res,next)=>{
     try{
