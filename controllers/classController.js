@@ -107,7 +107,9 @@ exports.addTeacher=async(req,res,next)=>{
 
             }).catch(err=>console.log(err));
         }
-    ).catch(err=>console.log(err));
+    ).catch(err=>{
+        status:'fail'
+    });
 }
 exports.getTeacher=async(req,res,next)=>{
     try{

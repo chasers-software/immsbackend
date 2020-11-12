@@ -11,11 +11,7 @@ exports.assignMarks=async(req,res,next)=>{
             let input=[];
             input=[mark.test,mark.practical,mark.username,subject_code];
             console.log(input);
-            pool.execute('UPDATE marks SET theory_marks=?,practical_marks=? where username=? and subject_code=?',input)
-            .then(data=>{
-                console.log("updated");
-            })
-            .catch(err=>console.log(err));
+            await pool.execute('UPDATE marks SET theory_marks=?,practical_marks=? where username=? and subject_code=?',input);
         }
         return res.status(200).json({
             status:'success',
