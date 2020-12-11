@@ -64,8 +64,8 @@ const fillMarks=async (section_code)=>{
         {
             for(subject of subjectInPrograms)
             {
-              const params=[student.username,subject.subject_code,0,0,subject.semester];
-              pool.execute('INSERT INTO marks(username,subject_code,theory_marks,practical_marks,semester) VALUES(?,?,?,?,?)',params).then(
+              const params=[student.username,subject.subject_code,0,0];
+              pool.execute('INSERT INTO marks(username,subject_code,theory_marks,practical_marks) VALUES(?,?,?,?)',params).then(
                 data=>{}
             ).catch(err=>console.log(err));
             }
@@ -74,4 +74,8 @@ const fillMarks=async (section_code)=>{
         console.log(err);
     }
 }
+// fetcher("074","BCT","A");
+// fetcher("074","BCT","B");
+
+
 module.exports={fetcher,fillMarks};

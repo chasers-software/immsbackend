@@ -20,7 +20,6 @@ for (const row of rawData)
     newData.push(newRow);
 }
 
-console.log(newData);
 // pool.execute('INSERT INTO subject SET subject_code=?,title=?,theory_fm=?,practical_fm=?,pass_percentage=?',newData).then(data=>{
 //     console.log("inserted");
 // }).catch(err=>console.log(err));

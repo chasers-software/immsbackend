@@ -3,6 +3,8 @@ const {promisify}=require('util');
 const jwt=require('jsonwebtoken');
 const catchAsync=require('./../utils/catchAsync');
 const AppError=require('./../utils/appError');
+const mysql=require('mysql2/promise');
+const pool=require('./../db/dbConnection');
 
 const signToken=id=>{
     return jwt.sign({id},process.env.JWT_SECRET,{
@@ -31,17 +33,24 @@ const createSendToken=(user,statusCode,req,res)=>{
 exports.login=async(req,res,next)=>{
     try{
     const {username,password}=req.body;
-    if (!email || !password){
+    if (!username || !password){
         return next(new AppError('Please provide email and password!',400));
     }
+    
+    const result=(await pool.execute(
+        'SELECT username,role FROM person WHERE username=? AND password = ?',[username,password]
+    ))[0];
+    //console.log(result[0].username);
+    if (result.length==0)
+        return next(new AppError('User doesnt exist',400));
     const user={
-        username:"tester"
-    };
+        username:result[0].username
+    }
     createSendToken(user,200,req,res);
     }catch(err){
         res.status(400).json({
-            status:'fail',
-            msg:'Wrong Username Or Password'
+        status:'fail',
+        err:err
         })
     }
 }
@@ -54,7 +63,7 @@ exports.logout=(req,res)=>{
     res.status(200).json({status:'success'});
 };
 
-exports.protect=catchAsync(async(req,res,next)=>{
+exports.protect=async(req,res,next)=>{
     let token;
     if (
         req.headers.authorization &&

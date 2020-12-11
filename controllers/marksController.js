@@ -4,12 +4,13 @@ const pool=require('./../db/dbConnection');
 exports.assignMarks=async(req,res,next)=>{
     try{
         const marks=req.body;
+        console.log(req.body);
         const {section_code,subject_code}=req.params;
         console.log(req.params);
         for (mark of marks)
         {
             let input=[];
-            input=[mark.test,mark.practical,mark.username,subject_code];
+            input=[mark.theory_marks,mark.practical_marks,mark.username,subject_code];
             console.log(input);
             await pool.execute('UPDATE marks SET theory_marks=?,practical_marks=? where username=? and subject_code=?',input);
         }

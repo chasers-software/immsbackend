@@ -1,6 +1,6 @@
 const mysql=require('mysql2/promise');
 const pool=require('./../db/dbConnection');
-const studentFetcher=require('./../utils/studentsFetch');
+const {fetcher,fillMarks}=require('./../utils/studentsFetch');
 exports.addSection=async (req,res,next)=>{
     try{
         const {section_code}=req.body;
@@ -8,12 +8,13 @@ exports.addSection=async (req,res,next)=>{
         const program=section_code.substr(3,3);
         const group1=section_code.substr(6,1);
         const group2=section_code.substr(7,1);
-        const data=[req.body.section_code,1];
+        const data=[req.body.section_code];
+        console.log(section_code,data);
         await pool.execute(
-        'INSERT INTO section(section_code,current_semester) VALUES(?,?)',data);
-        await studentFetcher.fetcher(batch,program,group1);
-        await studentFetcher.fetcher(batch,program,group2);
-        await studentFetcher.fillMarks(section_code);
+        'INSERT INTO section(section_code) VALUES(?)',data);
+        await fetcher(batch,program,group1);
+        await fetcher(batch,program,group2);
+        await fillMarks(section_code);
         res.status(200).json({
             status:'success'
         })
@@ -92,7 +93,12 @@ exports.addLecture=async(req,res,next)=>{
     try{
         const {username,section_code,subject_code}=req.query;
         const params=[username,section_code,subject_code,"2022-01-01"];
-        await pool.execute('INSERT INTO lecture(username,section_code,subject_code,marks_submission_date)',params1);
+        const result=await pool.execute('INSERT INTO lecture(username,section_code,subject_code,marks_submission_date)',params1);
+        console.log(result);
+        return res.status(200).json({
+            status:'success'
+        }
+        );
     }catch(err){
         res.status(400).json(
             {

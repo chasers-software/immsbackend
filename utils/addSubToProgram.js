@@ -26,5 +26,14 @@ const addSubjectsIn=async (program,year,part)=>{
         console.log(err);
     }
 }
+// program_code="BCT";
 
-
+//          addSubjectsIn(program_code,1,1);
+//          addSubjectsIn(program_code,2,1);
+//          addSubjectsIn(program_code,3,1);
+//          addSubjectsIn(program_code,4,1);
+//          addSubjectsIn(program_code,1,2);
+//          addSubjectsIn(program_code,2,2);
+//          addSubjectsIn(program_code,3,2);
+//          addSubjectsIn(program_code,4,2);
+module.exports=addSubjectsIn;
