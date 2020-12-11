@@ -91,9 +91,10 @@ exports.getLectureClass=async(req,res,next)=>{
 
 exports.addLecture=async(req,res,next)=>{
     try{
-        const {username,section_code,subject_code}=req.query;
+        const {username,section_code,subject_code}=req.body;
+        console.log(req.body);
         const params=[username,section_code,subject_code,"2022-01-01"];
-        const result=await pool.execute('INSERT INTO lecture(username,section_code,subject_code,marks_submission_date)',params1);
+        const result=await pool.execute('INSERT INTO lecture(username,section_code,subject_code,marks_submission_date) VALUES (?,?,?,?)',params);
         console.log(result);
         return res.status(200).json({
             status:'success'
@@ -106,38 +107,5 @@ exports.addLecture=async(req,res,next)=>{
                 err:err
             }
         )
-    }
-}
-exports.addTeacher=async(req,res,next)=>{
-    try{
-        const {username,password,full_name}=req.body;
-    const params1=[username,password,full_name,1,1];
-    const params2=[username]
-    pool.execute('INSERT INTO person(username,password,full_name,role,active) values(?,?,?,?,?)',person).then(
-        data=>{
-            pool.execute('INSERT INTO teacher(username) values(?)',params2).then(data=>{
-
-            }).catch(err=>console.log(err));
-        }
-    ).catch(err=>console.log(err));
-    }catch(err){
-        return res.status(404).json({
-            status:'fail',
-            err:err
-        })
-    }
-}
-exports.getTeacher=async(req,res,next)=>{
-    try{
-        const result=(await pool.execute('SELECT * FROM teacher'))[0];
-        res.status(200).json({
-            status:'success',
-            data:result
-        })
-    }catch(err){
-        return res.status(404).json({
-            status:'fail',
-            err:err
-        })
     }
 }

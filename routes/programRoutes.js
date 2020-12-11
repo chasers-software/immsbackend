@@ -7,4 +7,7 @@ router
     .route('/')
     .post(programController.addProgram)
     .get(programController.getPrograms);
+router
+    .route('/subject')
+    .get(programController.getSubjectsInProgram);
 module.exports=router;

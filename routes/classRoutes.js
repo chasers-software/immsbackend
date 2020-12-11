@@ -16,9 +16,6 @@ router.route('/lecture')
 router
     .route('/lecture/:username')
     .get(classController.getLectureClass);
-router
-    .route('/teacher/')
-    .post(classController.addTeacher)
-    .get(classController.getTeacher);
+
 
 module.exports=router;

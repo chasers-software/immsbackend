@@ -64,28 +64,35 @@ exports.logout=(req,res)=>{
 };
 
 exports.protect=async(req,res,next)=>{
-    let token;
-    if (
-        req.headers.authorization &&
-        req.headers.authorization.startsWith("Bearer")
-    ){
-        token=req.headers.authorization.split(' ')[1];
+    try{
+        let token;
+        if (
+            req.headers.authorization &&
+            req.headers.authorization.startsWith("Bearer")
+        ){
+            token=req.headers.authorization.split(' ')[1];
+        }
+        else if (req.cookies.jwt){
+            token=req.cookies.jwt;
+        }
+        if (!token){
+            return next(
+                new AppError('You are not logged in! ',401)
+            );
+        }
+        const currentUser={username:"tester"};
+        if (!currentUser){
+            return next(
+                newAppError('The user doesnt exist anymore',401)
+            );
+        }
+        req.user=currentUser;
+        res.locals.user=currentUser;
+        next();
+    }catch(err){
+        res.status(400).json({
+            status:'fail',
+            err:err
+        })
     }
-    else if (req.cookies.jwt){
-        token=req.cookies.jwt;
-    }
-    if (!token){
-        return next(
-            new AppError('You are not logged in! ',401)
-        );
-    }
-    const currentUser={username:"tester"};
-    if (!currentUser){
-        return next(
-            newAppError('The user doesnt exist anymore',401)
-        );
-    }
-    req.user=currentUser;
-    res.locals.user=currentUser;
-    next();
-})
+}
