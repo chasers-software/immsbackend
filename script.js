@@ -28,3 +28,5 @@ for (data of newData){
     console.log("inserted");
 }).catch(err=>console.log(err));
 }
+
+
