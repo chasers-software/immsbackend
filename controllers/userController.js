@@ -58,3 +58,19 @@ exports.getTeacher=async(req,res,next)=>{
         })
     }
 }
+exports.updateTeacher=async(req,res,next)=>{
+    try{
+        const {username}=req.params;
+        const {full_name,email,phone_no,program_code}=req.body;
+        const params=[full_name,email,phone_no,program_code,username];
+        const result=await pool.execute('UPDATE teacher SET full_name=?,email=?,phone_no=?,program_code=? WHERE username=?',params);
+        res.status(200).json({
+            status:'success'
+        })
+    }catch(err){
+        return res.status(404).json({
+            status:'fail',
+            err:err
+        })
+    }
+}
