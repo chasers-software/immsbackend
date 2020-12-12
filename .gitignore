@@ -1,5 +1,6 @@
 
 # dependencies
+/IMMSxDBMS
 /node_modules
 /.vscode
 /.vs
