@@ -1,5 +1,6 @@
 const express=require('express');
 const morgan=require('morgan');
+const path = require('path');
 const rateLimit=require('express-rate-limit');
 const helmet=require('helmet');
 const xss=require('xss-clean');
@@ -15,6 +16,9 @@ const marksRouter=require('./routes/marksRoutes')
 const programRouter=require('./routes/programRoutes');
 const userRouter=require('./routes/userRoutes');
 const app=express();
+
+app.use(express.static(path.join(__dirname, 'build')));
+
 
 let corsOptions={
     credentials:true
@@ -48,6 +52,8 @@ app.use('/api/class',classRouter);
 app.use('/api/marks',marksRouter);
 app.use('/api/program',programRouter);
 app.use('/api/user',userRouter);
-
+app.get('/*', function (req, res) {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  });
 app.use(globalErrorHandler);
 module.exports=app;
