@@ -4,9 +4,9 @@ use imms;
 CREATE TABLE person
 (   username varchar(50),
     password varchar(200),
-    full_name varchar(50),
     role tinyint,
     active tinyint,
+    created_at datetime DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(username)
 );
 CREATE TABLE subject
@@ -27,20 +27,23 @@ CREATE TABLE program
 );
 CREATE TABLE subject_in_program
 (
-    subject_code varchar(10),
     program_code varchar(10),
+    subject_code varchar(10),
     semester tinyint,
+    PRIMARY KEY(program_code,subject_code),
     FOREIGN KEY(subject_code) references subject(subject_code),
     FOREIGN KEY(program_code) references program(program_code)
 );
 CREATE TABLE section
 (
     section_code varchar(10),
+    created_at datetime DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(section_code)
 );
 
 CREATE TABLE student
 (   username varchar(50),
+    full_name varchar(50),
     section_code varchar(10),
     program_code varchar(10),
     PRIMARY KEY(username),
@@ -52,12 +55,17 @@ CREATE TABLE student
 CREATE TABLE admin
 (
     username varchar(50),
+    full_name varchar(50),
     PRIMARY KEY(username),
     FOREIGN KEY(username) references person(username)
 );
 CREATE TABLE teacher
 (
     username varchar(50),
+    full_name varchar(50),
+    email varchar(50),
+    phone_no varchar(15),
+    program_code varchar(10),
     PRIMARY KEY(username),
     FOREIGN KEY(username) references person(username)
 );
@@ -68,6 +76,8 @@ CREATE TABLE lecture
     section_code varchar(10),
     subject_code varchar(10),
     marks_submission_date DATE,
+    created_at datetime DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(username,section_code,subject_code),
     FOREIGN KEY(username) references teacher(username),
     FOREIGN KEY(section_code) references section(section_code),
     FOREIGN KEY(subject_code) references subject(subject_code)
@@ -78,10 +88,17 @@ CREATE TABLE marks
     subject_code varchar(10),
     theory_marks tinyint,
     practical_marks tinyint,
+    PRIMARY KEY(username,subject_code),
     FOREIGN KEY(username) references student(username),
     FOREIGN KEY(subject_code) references subject(subject_code)
 );
-
-
-INSERT INTO section(section_code) VALUES("074BCTAB");
-INSERT INTO program(program_code,program_name,program_degree) VALUES("BCT","Computer Engineering","Bachelor");
+CREATE TABLE logs
+(
+    teacher varchar(50),
+    student varchar(50),
+    theory_marks_old tinyint,
+    practical_marks_old tinyint,
+    theory_marks_new tinyint,
+    practical_marks_new tinyint,
+    
+)
