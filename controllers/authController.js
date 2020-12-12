@@ -44,7 +44,8 @@ exports.login=async(req,res,next)=>{
     if (result.length==0)
         return next(new AppError('User doesnt exist',400));
     const user={
-        username:result[0].username
+        username:result[0].username,
+        role:result[0].role
     }
     createSendToken(user,200,req,res);
     }catch(err){
