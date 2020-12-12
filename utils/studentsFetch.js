@@ -77,5 +77,4 @@ const fillMarks=async (section_code)=>{
 // fetcher("074","BCT","A");
 // fetcher("074","BCT","B");
 
-
 module.exports={fetcher,fillMarks};

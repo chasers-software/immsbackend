@@ -54,11 +54,13 @@ exports.getMarks=async(req,res,next)=>{
 exports.getSemMarks=async(req,res,next)=>{
     try{
         const {username,semester}=req.query;
-        const params=[username,semester*1];
+        let program_code=username.substr(3,3);
+        const params=[username,semester*1,program_code];
         const result=(await pool.execute(
             'SELECT marks.subject_code,title,theory_marks,practical_marks FROM marks '+
             'LEFT JOIN subject ON marks.subject_code=subject.subject_code '+
-            'WHERE username=? AND semester=?',params
+            'LEFT JOIN subject_in_program ON marks.subject_code=subject_in_program.subject_code '+
+            'WHERE username=? AND semester=? AND program_code=?',params
         ))[0];
         res.status(200).json({
             status:'success',
