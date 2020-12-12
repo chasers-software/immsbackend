@@ -16,7 +16,10 @@ const programRouter=require('./routes/programRoutes');
 const userRouter=require('./routes/userRoutes');
 const app=express();
 
-app.use(cors())
+let corsOptions={
+    credentials:true
+}
+app.use(cors(corsOptions))
 app.use(helmet());
 
 if (process.env.NODE_ENV==='development'){
