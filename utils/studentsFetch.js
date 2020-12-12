@@ -23,14 +23,13 @@ const addStudent=(data,group)=>{
     const role=2;
     const active=1;
     const section_code=data[0]+data[1]+getSection_code(group);
-    console.log(section_code);
     program_code=data[1];
     current_semester=1;
-    const person=[username,password,full_name,role,active];
-    const student=[username,section_code,program_code];
-    pool.execute('INSERT INTO person(username,password,full_name,role,active) values(?,?,?,?,?)',person).then(
+    const person=[username,password,role,active];
+    const student=[username,full_name,section_code,program_code];
+    pool.execute('INSERT INTO person(username,password,role,active) values(?,?,?,?)',person).then(
         data=>{
-            pool.execute('INSERT INTO student(username,section_code,program_code) values(?,?,?)',student).then(data=>{
+            pool.execute('INSERT INTO student(username,full_name,section_code,program_code) values(?,?,?,?)',student).then(data=>{
 
             }).catch(err=>console.log(err));
         }
@@ -44,7 +43,6 @@ const fetcher=async (batch,program,group)=>{
     params.append('batch', batch);
     params.append('group', group);
     const fetchedData=(await axios.post(process.env.studentURL,params)).data;
-    console.log(fetchedData);
     for (data of fetchedData)
     {
        addStudent(data,group);
@@ -56,10 +54,10 @@ const fetcher=async (batch,program,group)=>{
 const fillMarks=async (section_code)=>{
     try{
         const result=await pool.execute('SELECT username from student WHERE section_code=?',[section_code]);
+        console.log("Students:",result[0]);
         const program_code=section_code.substr(3,3);
         const subjectInPrograms=(await pool.execute('SELECT subject_code,semester FROM subject_in_program where program_code=?',[program_code]))[0];
         const students=result[0];
-        console.log(students);
         for (student of students)
         {
             for(subject of subjectInPrograms)
@@ -76,5 +74,4 @@ const fillMarks=async (section_code)=>{
 }
 // fetcher("074","BCT","A");
 // fetcher("074","BCT","B");
-
 module.exports={fetcher,fillMarks};

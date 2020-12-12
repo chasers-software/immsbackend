@@ -92,13 +92,3 @@ CREATE TABLE marks
     FOREIGN KEY(username) references student(username),
     FOREIGN KEY(subject_code) references subject(subject_code)
 );
-CREATE TABLE logs
-(
-    teacher varchar(50),
-    student varchar(50),
-    theory_marks_old tinyint,
-    practical_marks_old tinyint,
-    theory_marks_new tinyint,
-    practical_marks_new tinyint,
-    
-)

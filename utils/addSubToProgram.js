@@ -7,33 +7,30 @@ const dotenv = require('dotenv');
 
 dotenv.config({ path: './../config.env' });
 
-const addSubjectsIn=async (program,year,part)=>{
+const addSubjectsIn=async (program)=>{
     try{
         const params = new URLSearchParams();
-        params.append('prog',program);
-        params.append('year', year);
-        params.append('part', part);
-        const fetchedData=(await axios.post(process.env.subjectURL,params)).data;
-        console.log(fetchedData);
-        for (data of fetchedData)
+        const years=[1,2,3,4];
+        const parts=[1,2];
+        for (year of years)
         {
-            const value=[data[0],program,(year*1-1)*2+part*1];
-            pool.execute('INSERT INTO subject_in_program(subject_code,program_code,semester) VALUES(?,?,?)',value).then(
-                data=>{}
-            ).catch(err=>console.log(err));
+            for (part of parts)
+            {
+                params.append('prog',program);
+                params.append('year', year);
+                params.append('part', part);
+                const fetchedData=(await axios.post(process.env.subjectURL,params)).data;
+                for (data of fetchedData)
+                {
+                    const value=[data[0],program,(year*1-1)*2+part*1];
+                    pool.execute('INSERT INTO subject_in_program(subject_code,program_code,semester) VALUES(?,?,?)',value).then(
+                        data=>{console.log(data)}
+                        ).catch(err=>console.log(err));
+                }
+            }
         }
     }catch(err){
         console.log(err);
     }
 }
-// program_code="BCT";
-
-//          addSubjectsIn(program_code,1,1);
-//          addSubjectsIn(program_code,2,1);
-//          addSubjectsIn(program_code,3,1);
-//          addSubjectsIn(program_code,4,1);
-//          addSubjectsIn(program_code,1,2);
-//          addSubjectsIn(program_code,2,2);
-//          addSubjectsIn(program_code,3,2);
-//          addSubjectsIn(program_code,4,2);
 module.exports=addSubjectsIn;
