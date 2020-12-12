@@ -1,8 +1,5 @@
 
 # dependencies
-/IMMSxDBMS/*
-!IMMSxDBMS/build/
-
 
 /node_modules
 /.vscode
