@@ -24,7 +24,7 @@ exports.addTeacher=async(req,res,next)=>{
         })
     }
 }
-exports.getTeacher=async(req,res,next)=>{
+exports.getTeachers=async(req,res,next)=>{
     try{
         const result=(await pool.execute('SELECT teacher.username,full_name,email,phone_no,program_code FROM teacher '+
         'LEFT JOIN person ON person.username=teacher.username;'
@@ -33,6 +33,24 @@ exports.getTeacher=async(req,res,next)=>{
             status:'success',
             data:result
         })
+    }catch(err){
+        return res.status(404).json({
+            status:'fail',
+            err:err
+        })
+    }
+}
+exports.getTeacher=async(req,res,next)=>{
+    try{
+        const {username}=req.params;
+        const result=(await pool.execute('SELECT * FROM teacher WHERE username=?',[username]))[0];
+        if (result.length==0)
+            return next(new AppError('The user doesnt exist',400));
+        res.status(200).json({
+            status:'success',
+            data:result[0]
+        })
+
     }catch(err){
         return res.status(404).json({
             status:'fail',
