@@ -1,8 +1,8 @@
 
 # dependencies
-!/IMMSxDBMS/
-/IMMSxDBMS/*
-!/IMMSxDBMS/build/
+! IMMSxDBMS/
+**/IMMSxDBMS/*
+!**/IMMSxDBMS/build
 /node_modules
 /.vscode
 /.vs
