@@ -38,7 +38,7 @@ exports.login=async(req,res,next)=>{
     }
     
     const result=(await pool.execute(
-        'SELECT username,role,full_name FROM person WHERE username=? AND password = ?',[username,password]
+        'SELECT username,role FROM person WHERE username=? AND password = ?',[username,password]
     ))[0];
     //console.log(result[0].username);
     if (result.length==0)
