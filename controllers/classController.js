@@ -76,7 +76,7 @@ exports.getLectureClass=async(req,res,next)=>{
         console.log("abc");
         console.log(req.params);
         const {username}=req.params;
-        const results=(await pool.execute('SELECT section_code,lecture.subject_code,title FROM lecture LEFT JOIN subject ON lecture.subject_code=subject.subject_code'))[0];
+        const results=(await pool.execute('SELECT section_code,lecture.subject_code,title FROM lecture LEFT JOIN subject ON lecture.subject_code=subject.subject_code WHERE username=?',[username]))[0];
         return res.status(200).json({
             status:'success',
             data:results
