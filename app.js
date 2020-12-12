@@ -1,6 +1,7 @@
 const express=require('express');
 const morgan=require('morgan');
 const path = require('path');
+const requestIp=require('request-ip');
 const rateLimit=require('express-rate-limit');
 const helmet=require('helmet');
 const xss=require('xss-clean');
@@ -25,7 +26,7 @@ let corsOptions={
 }
 app.use(cors(corsOptions))
 app.use(helmet());
-
+app.use(requestIp.mw());
 if (process.env.NODE_ENV==='development'){
     app.use(morgan('dev'));
 }

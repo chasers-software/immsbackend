@@ -32,6 +32,7 @@ const createSendToken=(user,statusCode,req,res)=>{
 
 exports.login=async(req,res,next)=>{
     try{
+    console.log("Logging in from : ",req.clientIp,"\n");
     const {username,password}=req.body;
     if (!username || !password){
         return next(new AppError('Please provide email and password!',400));
@@ -66,16 +67,7 @@ exports.logout=(req,res)=>{
 
 exports.protect=async(req,res,next)=>{
     try{
-        let token;
-        if (
-            req.headers.authorization &&
-            req.headers.authorization.startsWith("Bearer")
-        ){
-            token=req.headers.authorization.split(' ')[1];
-        }
-        else if (req.cookies.jwt){
-            token=req.cookies.jwt;
-        }
+        let token=req.cookies.jwt;
         if (!token){
             return next(
                 new AppError('You are not logged in! ',401)
