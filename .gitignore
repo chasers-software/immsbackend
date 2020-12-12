@@ -1,8 +1,6 @@
 
 # dependencies
-!IMMSxDBMS/
-
-IMMSxDBMS/*
+/IMMSxDBMS/*
 !IMMSxDBMS/build/
 
 
