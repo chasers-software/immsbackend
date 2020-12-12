@@ -1,17 +1,6 @@
 
 # dependencies
-/IMMSxDBMS/node_modules
-/IMMSxDBMS/.vscode
-/IMMSxDBMS/.vs
-/IMMSxDBMS/.git
-/IMMSxDBMS/public
-/IMMSxDBMS/src
-/IMMSxDBMS/.gitattributes
-/IMMSxDBMS/.gitignore
-/IMMSxDBMS/desktop.ini
-/IMMSxDBMS/package.json
-/IMMSxDBMS/README.md 
-/IMMSxDBMS/yarn.lock
+
 /node_modules
 /.vscode
 /.vs
