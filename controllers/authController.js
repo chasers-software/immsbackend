@@ -6,8 +6,8 @@ const AppError=require('./../utils/appError');
 const mysql=require('mysql2/promise');
 const pool=require('./../db/dbConnection');
 
-const signToken=id=>{
-    return jwt.sign({id},process.env.JWT_SECRET,{
+const signToken=username=>{
+    return jwt.sign({username},process.env.JWT_SECRET,{
         expiresIn:process.env.JWT_EXPIRES_IN
     });
 };
