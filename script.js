@@ -24,6 +24,7 @@ for (const row of rawData)
 //     console.log("inserted");
 // }).catch(err=>console.log(err));
 for (data of newData){
+    
     pool.execute('INSERT INTO subject(subject_code,title,theory_fm,practical_fm,pass_percentage) values(?,?,?,?,?)',data).then(data=>{
     console.log("inserted");
 }).catch(err=>console.log(err));

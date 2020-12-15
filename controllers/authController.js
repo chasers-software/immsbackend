@@ -30,18 +30,15 @@ const createSendToken=(user,statusCode,req,res)=>{
     });
 };
 
-exports.login=async(req,res,next)=>{
-    try{
+exports.login=catchAsync(async(req,res,next)=>{
     console.log("Logging in from : ",req.clientIp,"\n");
     const {username,password}=req.body;
     if (!username || !password){
         return next(new AppError('Please provide email and password!',400));
     }
-    
     const result=(await pool.execute(
         'SELECT username,role FROM person WHERE username=? AND password = ?',[username,password]
-    ))[0];
-    //console.log(result[0].username);
+        ))[0];
     if (result.length==0)
         return next(new AppError('User doesnt exist',400));
     const user={
@@ -49,13 +46,7 @@ exports.login=async(req,res,next)=>{
         role:result[0].role
     }
     createSendToken(user,200,req,res);
-    }catch(err){
-        res.status(400).json({
-        status:'fail',
-        err:err
-        })
-    }
-}
+})
 
 exports.logout=(req,res)=>{
     res.cookie('jwt','loggedout',{
@@ -65,27 +56,20 @@ exports.logout=(req,res)=>{
     res.status(200).json({status:'success'});
 };
 
-exports.protect=async(req,res,next)=>{
-    try{
-        let token=req.cookies.jwt;
-        if (!token){
-            return next(
-                new AppError('You are not logged in! ',401)
-            );
-        }
-        const currentUser={username:"tester"};
-        if (!currentUser){
-            return next(
-                newAppError('The user doesnt exist anymore',401)
-            );
-        }
-        req.user=currentUser;
-        res.locals.user=currentUser;
-        next();
-    }catch(err){
-        res.status(400).json({
-            status:'fail',
-            err:err
-        })
+exports.protect=catchAsync(async(req,res,next)=>{
+    let token=req.cookies.jwt;
+    if (!token){
+        return next(
+            new AppError('You are not logged in! ',401)
+        );
     }
-}
+    const currentUser={username:"tester"};
+    if (!currentUser){
+        return next(
+            newAppError('The user doesnt exist anymore',401)
+        );
+    }
+    req.user=currentUser;
+    res.locals.user=currentUser;
+    next();
+})

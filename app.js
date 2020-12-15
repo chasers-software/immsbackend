@@ -53,8 +53,12 @@ app.use('/api/class',classRouter);
 app.use('/api/marks',marksRouter);
 app.use('/api/program',programRouter);
 app.use('/api/user',userRouter);
+app.all('/api/*', (req, res, next) => {
+    next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
+  });
 app.get('/*', function (req, res) {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
   });
+
 app.use(globalErrorHandler);
 module.exports=app;

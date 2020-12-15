@@ -4,19 +4,28 @@ const Apperror=require('./../utils/appError');
 const catchAsync=require('./../utils/catchAsync');
 const axios=require('axios');
 const dotenv = require('dotenv');
-
+const toArabic=require('roman-numerals').toArabic;
 dotenv.config({ path: './../config.env' });
 const section_code="074BCTAB";
+const params = new URLSearchParams();
+params.append('prog',"BCT");
+params.append('year', 4);
+params.append('part', 2);
+axios.post("http://pcampus.edu.np/api/subjects/",params).then(data=>
+    {
+        console.log(data.data);
+        
+    }).catch(err=>console.log(err));
 // pool.execute(
 //     `SELECT username,full_name FROM student JOIN person USING(username) WHERE section_code=?`,[section_code]
 // ).then(data=>{
 //     const arr=Array.from(data[0]);
 //     console.log(arr);
 // }).catch(err=>console.log(err));
-mark={
-    username:"074BCT002"
-};
-subject_code="CE401";
+// mark={
+//     username:"074BCT002"
+// };
+// subject_code="CE401";
 // pool.execute('SELECT username FROM marks WHERE username=? AND subject_code=?',[mark.username,subject_code]).then(
 //     data=>{
 //         if (data[0].length==0){
@@ -24,4 +33,4 @@ subject_code="CE401";
 //         }
 //     }
 // )
-pool.execute('SELECT * FROM program').then(data=>console.log(data[0]));
+// pool.execute('SELECT * FROM program').then(data=>console.log(data[0]));
