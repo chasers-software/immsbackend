@@ -13,15 +13,15 @@ const addSubjectsIn=catchAsync(async (program)=>{
     const params = new URLSearchParams();
     const years=[1,2,3,4];
     const parts=[1,2];
-    for (year of years)
+    for (let year of years)
     {
-        for (part of parts)
+        for (let part of parts)
         {
             params.append('prog',program);
             params.append('year', year);
             params.append('part', part);
             const fetchedData=(await axios.post(process.env.subjectURL,params)).data;
-            for (data of fetchedData)
+            for (let data of fetchedData)
             {
                 let params1=[...data];
                 if (data[1].startsWith("Elective"))
@@ -30,7 +30,7 @@ const addSubjectsIn=catchAsync(async (program)=>{
                     let num=toArabic(nameArray[1])
                     let newCode=program+year.toString()+part.toString()+num.toString();
                     let newTitle=nameArray[0]+" "+nameArray[1]+" "+program;
-                    params1=[newCode,newTitle,data[2],data[3]];
+                    let params1=[newCode,newTitle,data[2],data[3]];
                     let result1=await pool.execute(
                         'SELECT subject_id FROM subject WHERE subject_code=?',
                         [newCode]

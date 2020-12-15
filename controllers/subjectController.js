@@ -7,5 +7,6 @@ const catchAsync=require('../utils/catchAsync');
 exports.addSubject=catchAsync(async (req,res,next)=>{
     
     console.log("In add subject:",req.originalUrl);
-    await pool.execute('SELECT * FROM subject WHERE subject_code=?',[]);
+    let results=await pool.execute('SELECT * FROM subject WHERE subject_id=?',[]);
+    console.log(results);
 });

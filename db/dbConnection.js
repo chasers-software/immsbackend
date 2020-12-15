@@ -7,16 +7,16 @@ const pool=mysql.createPool({
     waitForConnections:true
 });
 
-pool.on('connection',function(connection){
+// pool.on('connection',function(connection){
     
-})
-pool.on('acquire',function(connection){
+// })
+// pool.on('acquire',function(connection){
     
-});
-pool.on('enqueue',function(){
+// });
+// pool.on('enqueue',function(){
     
-})
-pool.on('release',function(connection){
-});
+// })
+// pool.on('release',function(connection){
+// });
 module.exports=pool;
 
