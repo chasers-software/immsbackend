@@ -1,6 +1,6 @@
-drop database IF EXISTS imm;
-create database imm;
-use imm;
+drop database IF EXISTS imms;
+create database imms;
+use imms;
 CREATE TABLE person
 (   
     person_id int NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -27,7 +27,8 @@ CREATE TABLE program
 (
     program_id tinyint NOT NULL PRIMARY KEY AUTO_INCREMENT,
     program_code varchar(10) NOT NULL UNIQUE,
-    program_name varchar(50) NOT NULL,
+    program_name varchar(100) NOT NULL,
+    program_dept varchar(100) NOT NULL,
     program_degree varchar(50) NOT NULL
 );
 CREATE TABLE elective 
@@ -40,6 +41,17 @@ CREATE TABLE elective
     FOREIGN KEY(elective_id) references subject(subject_id),
     FOREIGN KEY(subject_id) references subject(subject_id)
 );
+CREATE TABLE elective_choice
+(
+    id int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    student_id int NOT NULL,
+    elective_id smallint NOT NULL,
+    subject_id smallint NOT NULL,
+    FOREIGN KEY(elective_id) references subject(subject_id),
+    FOREIGN KEY(subject_id) references subject(subject_id),
+    FOREIGN KEY(student_id) references student(person_id),
+    UNIQUE KEY(student_id,elective_id)
+)
 CREATE TABLE batch
 (
     batch_id tinyint NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -60,9 +72,9 @@ CREATE TABLE section
 (
     section_id smallint NOT NULL PRIMARY KEY AUTO_INCREMENT,
     section_code varchar(10) NOT NULL,
-    created_at datetime DEFAULT CURRENT_TIMESTAMP,
     batch_id tinyint NOT NULL,
     program_id tinyint NOT NULL,
+    created_at datetime DEFAULT CURRENT_TIMESTAMP,
     status tinyint DEFAULT 1,
     FOREIGN KEY(batch_id) references batch(batch_id),
     FOREIGN KEY(program_id) references program(program_id)
@@ -155,3 +167,4 @@ CREATE TABLE logs
     FOREIGN KEY(teacher_id) references person(person_id),
     FOREIGN KEY(student_id) references person(person_id)
 );
+INSERT INTO batch(batch_name,semester) VALUES("074",7);

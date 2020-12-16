@@ -3,19 +3,32 @@ const pool=require('./../db/dbConnection');
 const catchAsync=require('./../utils/catchAsync');
 const AppError=require('./../utils/appError');
 const {fetcher,fillMarks}=require('./../utils/studentsFetch');
+const { checkPreferences } = require('joi');
 exports.addSection=catchAsync(async (req,res,next)=>{
-    const {section_code}=req.body;
-    const batch=section_code.substr(0,3);
-    const program=section_code.substr(3,3);
-    const group1=section_code.substr(6,1);
-    const group2=section_code.substr(7,1);
-    const data=[req.body.section_code];
-    console.log(section_code,data);
+    const {batch_id,program_id}=req.body;
+    check([batch_id,program_id],next);
+    let result1=(await pool.execute('SELECT batch_id,batch_name FROM batch WHERE batch_id=?',[batch_id]))[0];
+    let result2=(await pool.execute('SELECT program_id,program_name FROM program WHERE PROGRAM_ID=?',[program_id]))[0];
+    if (result1.length==0 || result2.length==0) return next(new AppError("The program or batch doesnt exist"),400);
+    const batch_name=result1[0].batch_name;
+    const program_name=result2[0].program_name;
+
+    let result3=(await pool.execute('SELECT COUNT(*) AS count FROM section WHERE batch_id=? AND program_id=?',[batch_id,program_id]))[0];
+    let group1,group2;
+    let count=result3[0].count;
+    if (count==0) {group1='A';group2='B';}
+    else if (count==1) {group1='C';group2='D';}
+    else if (count==2) {group1='E';group2='F';}
+    else if (count==3) {group1='G';group2='H';}
+    else {group1='I',group2='J'}
+
+    let section_code=batch_name+program_name+group1+group2;
+    checker([section_code,batch_id,program_id],next);
     await pool.execute(
-    'INSERT INTO section(section_code) VALUES(?)',data);
-    await fetcher(batch,program,group1);
-    await fetcher(batch,program,group2);
-    await fillMarks(section_code);
+    'INSERT INTO section(section_code,batch_id,program_id) VALUES(?,?,?)',[section_code,batch_id,program_id]);
+    await fetcher(batch_name,program_name,batch_id,program_id,group1,next);
+    await fetcher(batch_name,program_name,batch_id,program_id,group2,next);
+    await fillMarks(section_code,next);
     res.status(200).json({
         status:'success'
     })

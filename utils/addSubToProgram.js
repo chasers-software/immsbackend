@@ -6,10 +6,11 @@ const AppError = require('./appError');
 const axios=require('axios');
 const dotenv = require('dotenv');
 const toArabic=require('roman-numerals').toArabic;
+const checker = require('./checker');
 
 dotenv.config({ path: './../config.env' });
 
-const addSubjectsIn=catchAsync(async (program,program_id)=>{
+const addSubjectsIn=catchAsync(async (program,program_id,next)=>{
     const params = new URLSearchParams();
     const years=[1,2,3,4];
     const parts=[1,2];
@@ -34,34 +35,41 @@ const addSubjectsIn=catchAsync(async (program,program_id)=>{
                     let newTitle=nameArray[0]+" "+nameArray[1]+" "+program;
                     params1=[newCode,newTitle,data[2],data[3]];
                 }
+                let paramsA=[params1[0]];
+                checker(paramsA,next);
                 let result1=(await pool.execute(
                     'SELECT subject_id FROM subject WHERE subject_code=?',
-                    [params[0]]
+                    paramsA
                 ))[0];
                 if (result1.length==0)
                 {
+                    checker(params1,next);
                     subject_id=(await pool.execute(
-                    'INSERT INTO subject(subject_code,title,theory_fm,final_fm) '+
-                    'VALUES(?,?,?,?)',
-                    params1
-                    ))[0].insertId;
+                        'INSERT INTO subject(subject_code,title,theory_fm,practical_fm) '+
+                        'VALUES(?,?,?,?)',
+                        params1
+                        ))[0].insertId;
                 }
                 else {
                     subject_id=result1[0].subject_id;
                 }
                 
                 //For Adding Subjects To Program
+                let paramsB=[program_id,subject_id];
+                checker(paramsB,next);
                 let result2=(await pool.execute(
                     'SELECT id from subject_in_program '+
                     'WHERE program_id=? AND subject_id=?',
-                    [program_id,subject_id]
+                    paramsB
                 ))[0];
                 if (result2.length==0)
                 {
+                    let paramsC= [program_id,subject_id,(year*1-1)*2+part*1];
+                    checker(paramsC,next);
                     await pool.execute(
                     'INSERT INTO subject_in_program(program_id,subject_id,semester) '+
                     'VALUES(?,?,?)',
-                    [program_id,subject_id,(year*1-1)*2+part*1]
+                    paramsC
                     )
                 }
             }
