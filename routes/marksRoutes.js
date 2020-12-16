@@ -9,7 +9,7 @@ router
     .get(marksController.getSemMarks);
 
 router
-    .route('/class/:section_code/:subject_code')
+    .route('/lecture/:lecture_id')
     .post(marksController.assignMarks)
     .get(marksController.getMarks);
 

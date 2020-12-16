@@ -55,29 +55,23 @@ exports.getAllSection=catchAsync(async(req,res,next)=>{
 })
 exports.getSectionStudents=catchAsync (async(req,res,next)=>{
     console.log(req.params);
-    const {section_code}=req.params;
-    const result=await pool.execute(
-        `SELECT username,full_name FROM student JOIN person USING(username) WHERE section_code=?`,[section_code]
-    );
-    const data=[];
-    for (row of result[0])
-    {
-        const obj={
-            username:row.username,
-            full_name:row.full_name};
-        data.push(obj);
-    }
-    console.log(data);
+    const {section_id}=req.params;
+    const result=(await pool.execute(
+        `SELECT * FROM student LEFT JOIN person ON student.person_id=person.person_id WHERE section_id=?`,[section_id]
+    ))[0];
+    
+    //console.log(data);
     return res.status(200).json({
         status:'success',
-        data:result[0]
+        data:result
     });
 })
 
 exports.getLectureClass=catchAsync(async(req,res,next)=>{
 
     const {person_id}=req.query;
-    const results=(await pool.execute('SELECT * FROM lecture LEFT JOIN subject ON lecture.subject_id=subject.subject_id WHERE person_id=?',[person_id]))[0];
+    const results=(await pool.execute(
+        'SELECT * FROM lecture LEFT JOIN subject ON lecture.subject_id=subject.subject_id LEFT JOIN section ON lecture.section_id=section.section_id WHERE person_id=?',[person_id]))[0];
     return res.status(200).json({
         status:'success',
         data:results

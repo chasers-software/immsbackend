@@ -24,12 +24,15 @@ const addStudent=catchAsync(async (data,program_id,section_id,next)=>{
     const status=1;
     //const section_code=data[0]+data[1]+getGroup_code(group);
     const params1=[username,password,full_name,role,status];
-    const params2=[section_id,program_id];
+    
     checker(params1,next);
+    
+    let person_id=(await pool.execute('INSERT INTO person(username,password,full_name,role,status) '+
+                      'values(?,?,?,?,?)',params1))[0].insertId;
+    const params2=[person_id,section_id,program_id];
     checker(params2,next)
-    await pool.execute('INSERT INTO person(username,password,full_name,role,status) '+
-                      'values(?,?,?,?,?)',params1)
-    await pool.execute('INSERT INTO student(section_id,program_id) values(?,?)',params2)    
+    await pool.execute('INSERT INTO student(person_id,section_id,program_id) values(?,?,?)',params2);
+
 })
 const studentFetcher=catchAsync(async (obj,section_id,group,next)=>{
     //console.log("Group in fetcher:",group,next);

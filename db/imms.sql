@@ -32,6 +32,11 @@ CREATE TABLE program
     program_dept varchar(100) NOT NULL,
     program_degree varchar(50) NOT NULL
 );
+CREATE TABLE dept
+(
+    dept_id tinyint NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    dept_name varchar(100) NOT NULL
+);
 CREATE TABLE elective 
 (
 	id smallint NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -42,17 +47,7 @@ CREATE TABLE elective
     FOREIGN KEY(elective_id) references subject(subject_id),
     FOREIGN KEY(subject_id) references subject(subject_id)
 );
-CREATE TABLE elective_choice
-(
-    id int NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    student_id int NOT NULL,
-    elective_id smallint NOT NULL,
-    subject_id smallint NOT NULL,
-    FOREIGN KEY(elective_id) references subject(subject_id),
-    FOREIGN KEY(subject_id) references subject(subject_id),
-    FOREIGN KEY(student_id) references student(person_id),
-    UNIQUE KEY(student_id,elective_id)
-)
+
 CREATE TABLE batch
 (
     batch_id tinyint NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -90,7 +85,17 @@ CREATE TABLE student
     FOREIGN KEY(section_id) references section(section_id),
     FOREIGN KEY(program_id) references program(program_id)
 );
-
+CREATE TABLE elective_choice
+(
+    id int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    student_id int NOT NULL,
+    elective_id smallint NOT NULL,
+    subject_id smallint NOT NULL,
+    FOREIGN KEY(elective_id) references subject(subject_id),
+    FOREIGN KEY(subject_id) references subject(subject_id),
+    FOREIGN KEY(student_id) references student(person_id),
+    UNIQUE KEY(student_id,elective_id)
+);
 CREATE TABLE admin
 (
     person_id int NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -99,8 +104,9 @@ CREATE TABLE admin
 CREATE TABLE teacher
 (
     person_id int NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    program_id tinyint NOT NULL,
-    FOREIGN KEY(person_id) references person(person_id)
+    dept_id tinyint NOT NULL,
+    FOREIGN KEY(person_id) references person(person_id),
+    FOREIGN KEY(dept_id) references dept(dept_id)
 );
 
 CREATE TABLE lecture
@@ -132,11 +138,15 @@ CREATE TABLE marks
 CREATE TABLE notification
 (
     id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    person_id int NOT NULL,
+    sender_id int NOT NULL,
+    receiver_id int NOT NULL,
+    subject_id int NOT NULL,
     message varchar(500),
     status tinyint NOT NULL DEFAULT 0,
     created_at datetime DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY(person_id) references person(person_id)
+    FOREIGN KEY(sender_id) references person(person_id),
+    FOREIGN KEY(receiver_id) references person(person_id),
+     FOREIGN KEY(subject_id) references subject(subject_id)
 );
 CREATE TABLE post
 (
