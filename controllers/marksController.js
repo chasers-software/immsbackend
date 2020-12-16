@@ -1,16 +1,17 @@
-const mysql=require('mysql2/promise');
 const pool=require('./../db/dbConnection');
 const catchAsync=require('./../utils/catchAsync');
 const AppError=require('./../utils/appError');
+const checker=require('../utils/checker')
 exports.assignMarks=catchAsync(async(req,res,next)=>{
     const marks=req.body;
     console.log(req.body);
-    const {section_code,subject_code}=req.params;
+    const {section_id,subject_id}=req.params;
+    console.log("Section Code:",section_id);
     console.log(req.params);
-    for (mark of marks)
+    for (let mark of marks)
     {
         let input=[];
-        input=[mark.theory_marks,mark.practical_marks,mark.username,subject_code];
+        input=[mark.theory_marks,mark.practical_marks,mark.person_id,subject_id];
         console.log(input);
         await pool.execute('UPDATE marks SET theory_marks=?,practical_marks=? where username=? and subject_code=?',input);
     }
@@ -20,8 +21,8 @@ exports.assignMarks=catchAsync(async(req,res,next)=>{
     })
 })
 exports.getMarks=catchAsync(async(req,res,next)=>{
-    const {section_code,subject_code}=req.params;
-    const params=[section_code,subject_code];
+    const {section_id,subject_id}=req.params;
+    const params=[section_id,subject_id];
     console.log(params);
     const result1=await pool.execute(
         'SELECT marks.username,full_name,theory_marks,practical_marks '+

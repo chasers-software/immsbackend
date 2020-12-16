@@ -13,7 +13,7 @@ const signToken=username=>{
 };
 
 const createSendToken=(user,statusCode,req,res)=>{
-    const token=signToken(user.username);
+    const token=signToken(user.person_id);
     const cookieOptions={
         expires:new Date(Date.now()+process.env.JWT_COOKIE_EXPIRES_IN*24*60*60*1000),
         httpOnly:true
@@ -23,7 +23,6 @@ const createSendToken=(user,statusCode,req,res)=>{
     user.password=undefined;
     res.status(statusCode).json({
         status:'success',
-        token,
         data:{
             user
         }
@@ -37,15 +36,11 @@ exports.login=catchAsync(async(req,res,next)=>{
         return next(new AppError('Please provide email and password!',400));
     }
     const result=(await pool.execute(
-        'SELECT username,role FROM person WHERE username=? AND password = ?',[username,password]
+        'SELECT * FROM person WHERE username=? AND password = ?',[username,password]
         ))[0];
     if (result.length==0)
         return next(new AppError('User doesnt exist',400));
-    const user={
-        username:result[0].username,
-        role:result[0].role
-    }
-    createSendToken(user,200,req,res);
+    createSendToken(result[0],200,req,res);
 })
 
 exports.logout=(req,res)=>{

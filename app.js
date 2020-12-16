@@ -16,6 +16,7 @@ const classRouter=require('./routes/classRoutes');
 const marksRouter=require('./routes/marksRoutes')
 const programRouter=require('./routes/programRoutes');
 const userRouter=require('./routes/userRoutes');
+const batchRouter=require('./routes/batchRoutes');
 const app=express();
 
 app.use(express.static(path.join(__dirname, 'build')));
@@ -53,6 +54,7 @@ app.use('/api/class',classRouter);
 app.use('/api/marks',marksRouter);
 app.use('/api/program',programRouter);
 app.use('/api/user',userRouter);
+app.use('/api/batch',batchRouter);
 app.all('/api/*', (req, res, next) => {
     next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
   });

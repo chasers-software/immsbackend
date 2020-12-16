@@ -7,15 +7,11 @@ const router=express.Router();
 router
     .route('/section')
     .post(classController.addSection)
-    .get(classController.getSection);
+    .get(classController.getAllSection);
 router
     .route('/students/:section_code')
     .get(classController.getSectionStudents);
 router.route('/lecture')
-    .post(classController.addLecture);
-router
-    .route('/lecture/:username')
+    .post(classController.addLecture)
     .get(classController.getLectureClass);
-
-
 module.exports=router;

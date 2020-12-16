@@ -3,7 +3,7 @@ const pool=mysql.createPool({
     host:'localhost',
     user:'root',
     password:'',
-    database:'imms',
+    database:'imms1',
     waitForConnections:true
 });
 

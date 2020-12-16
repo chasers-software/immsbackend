@@ -1,35 +1,16 @@
-const Joi = require('joi');
-const t1=async()=>{
-    try {
-        const schema = Joi.object({
-            username: Joi.string()
-                .alphanum()
-                .min(3)
-                .max(30)
-                .required(),
-        
-            password: Joi.string()
-                .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
-                .required(),
-        })
-        let password;
-        const user={
-            username:"abc",
-            password
-        }
-        const value = await schema.validateAsync(user);
-        console.log(value);
-    }
-    catch (err) {
-        console.log("HEre***");
-        console.log(err);
-     }
-}
-t1()
+const pool=require('../db/dbConnection')
+const func=async()=>{
+    try{
+        const result=(await pool.execute(
+        'SELECT * FROM person WHERE username=? AND password = ?',["a1","abcdef"]
+        ))[0];
+        console.log(result);
+        }catch(err){
+            console.log(err);
+}}
 
 
-
-
+func();
 // -> { value: {}, error: '"username" is required' }
 
 // Also -

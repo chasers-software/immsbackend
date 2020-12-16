@@ -9,8 +9,8 @@ CREATE TABLE person
     full_name varchar(50) NOT NULL,
     email varchar(50),
     phone_no varchar(20),
-    role tinyint NOT NULL,
-    status tinyint NOT NULL,
+    role tinyint NOT NULL DEFAULT 2,
+    status tinyint NOT NULL DEFAULT 1,
     created_at datetime DEFAULT CURRENT_TIMESTAMP
 );
 CREATE TABLE subject
@@ -55,7 +55,7 @@ CREATE TABLE elective_choice
 CREATE TABLE batch
 (
     batch_id tinyint NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    batch_name varchar(5),
+    batch_code varchar(5),
     semester tinyint NOT NULL
 );
 CREATE TABLE subject_in_program
@@ -71,7 +71,7 @@ CREATE TABLE subject_in_program
 CREATE TABLE section
 (
     section_id smallint NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    section_code varchar(10) NOT NULL,
+    section_code varchar(15) NOT NULL,
     batch_id tinyint NOT NULL,
     program_id tinyint NOT NULL,
     created_at datetime DEFAULT CURRENT_TIMESTAMP,
@@ -137,6 +137,16 @@ CREATE TABLE notification
     created_at datetime DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(person_id) references person(person_id)
 );
+CREATE TABLE post
+(
+    id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    person_id int NOT NULL,
+    section_id 
+    post text,
+    status tinyint NOT NULL DEFAULT 0,
+    created_at datetime DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(person_id) references person(person_id)
+);
 CREATE TABLE lecture_session
 (
     id int NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -168,3 +178,6 @@ CREATE TABLE logs
     FOREIGN KEY(student_id) references person(person_id)
 );
 INSERT INTO batch(batch_name,semester) VALUES("074",7);
+INSERT INTO person(username,password,full_name,email,phone_no,role,status) 
+values("a1","abcdef","Admin One","a1@abc.com","9849657135",0,1);
+INSERT INTO admin(person_id) values(1);
