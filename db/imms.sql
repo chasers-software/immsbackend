@@ -9,6 +9,7 @@ CREATE TABLE person
     full_name varchar(50) NOT NULL,
     email varchar(50),
     phone_no varchar(20),
+    avatar 
     role tinyint NOT NULL DEFAULT 2,
     status tinyint NOT NULL DEFAULT 1,
     created_at datetime DEFAULT CURRENT_TIMESTAMP
@@ -177,7 +178,7 @@ CREATE TABLE logs
     FOREIGN KEY(teacher_id) references person(person_id),
     FOREIGN KEY(student_id) references person(person_id)
 );
-INSERT INTO batch(batch_name,semester) VALUES("074",7);
+INSERT INTO batch(batch_code,semester) VALUES("074",7);
 INSERT INTO person(username,password,full_name,email,phone_no,role,status) 
 values("a1","abcdef","Admin One","a1@abc.com","9849657135",0,1);
 INSERT INTO admin(person_id) values(1);
