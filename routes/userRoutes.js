@@ -13,5 +13,10 @@ router.route('/teacher/:person_id')
 router.route('/teacher')
     .post(userController.addTeacher)
     .get(userController.getTeachers);
+// router.route('/student/:person_id')
+//     .get(userController.getStudent)
+//     .patch(userController.updateStudent);
+router.route('/student')
+    .get(userController.getAllStudent);
 
 module.exports=router;

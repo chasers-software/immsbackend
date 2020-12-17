@@ -8,6 +8,10 @@ exports.assignMarks=catchAsync(async(req,res,next)=>{
     const {lecture_id}=req.params;
     checker([lecture_id]);
     const lecture=(await pool.execute('SELECT * FROM lecture WHERE lecture_id=?',[lecture_id]))[0][0];
+    if(!lecture)
+    {
+        return next(new AppError("Lecture Doesnt exist!",400));
+    }
     const {section_id,subject_id}=lecture;
     console.log("Section Code:",section_id);
     console.log(req.params);
@@ -22,7 +26,8 @@ exports.assignMarks=catchAsync(async(req,res,next)=>{
         checker([subject_id]);
         let subject_name=(await pool.execute('SELECT title FROM subject WHERE subject_id=?',[subject_id]))[0][0].title;
         console.log(subject_name);
-        let msg=`${lecture.lecture_id} updated  ${subject_name} mark`;
+        
+        let msg=`Your ${subject_name} mark`;
         let params2=[lecture.lecture_id,mark.person_id,subject_id,msg]
         checker(params2);
         await pool.execute('INSERT INTO notification(sender_id,receiver_id,subject_id,message) values(?,?,?,?)',params2);
@@ -61,7 +66,7 @@ exports.getSemMarks=catchAsync(async(req,res,next)=>{
     const params=[person_id,semester*1];
     checker(params);
     const result=(await pool.execute(
-        'SELECT subject.subject_code,title,theory_marks,practical_marks FROM marks '+
+        'SELECT subject.subject_id,subject.subject_code,title,theory_marks,practical_marks FROM marks '+
         'LEFT JOIN subject ON marks.subject_id=subject.subject_id '+
         'LEFT JOIN subject_in_program ON marks.subject_id=subject_in_program.subject_id '+
         'WHERE marks.person_id=? AND semester=? ',params

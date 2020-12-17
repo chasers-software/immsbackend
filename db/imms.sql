@@ -142,6 +142,7 @@ CREATE TABLE notification
     receiver_id int NOT NULL,
     subject_id int NOT NULL,
     message varchar(500),
+    type tinyint NOT NULL DEFAULT 0,
     status tinyint NOT NULL DEFAULT 0,
     created_at datetime DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(sender_id) references person(person_id),

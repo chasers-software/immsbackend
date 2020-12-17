@@ -42,6 +42,29 @@ exports.getTeachers=catchAsync(async(req,res,next)=>{
         data:result
     })
 })
+exports.getAllStudent=catchAsync(async(req,res,next)=>{
+    const {username}=req.query;
+    let result;
+    if (username)
+    {
+        result=(await pool.execute('SELECT * FROM person WHERE username=?',[username]))[0][0];
+        result.password=undefined;
+    }
+    else
+    {
+        result=(await pool.execute('SELECT * FROM person '+
+        'LEFT JOIN person ON person.person_id=teacher.person_id '+
+        'LEFT JOIN dept on teacher.dept_id=dept.dept_id ' 
+        ,[]))[0];
+        result.forEach(v=>v.password=undefined);
+    }    
+    if (result.length==0)
+        return next(new AppError('The user doesnt exist',400));
+    res.status(200).json({
+        status:'success',
+        data:result
+    })
+})
 exports.getTeacher=catchAsync(async(req,res,next)=>{
     const {person_id}=req.params;
     checker([person_id]);
