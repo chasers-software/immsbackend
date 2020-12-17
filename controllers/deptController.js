@@ -16,7 +16,7 @@ exports.getAllDept=catchAsync(async (req,res,next)=>{
 exports.addDept=catchAsync(async (req,res,next)=>{
     let {dept_name}=req.body;
     console.log("DEPT:",dept_name);
-    checker([dept_name],next);
+    checker([dept_name]);
     await pool.execute('INSERT INTO dept(dept_name) values(?)',[dept_name]);
     res.status(200).json({
         status:'success',

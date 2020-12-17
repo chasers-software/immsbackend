@@ -152,11 +152,11 @@ CREATE TABLE post
 (
     id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,
     person_id int NOT NULL,
-    section_id 
-    post text,
-    status tinyint NOT NULL DEFAULT 0,
+    section_id smallint NOT NULL,
+    content varchar(1000),
     created_at datetime DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY(person_id) references person(person_id)
+    FOREIGN KEY(person_id) references person(person_id),
+    FOREIGN KEY(section_id) references section(section_id)
 );
 CREATE TABLE lecture_session
 (

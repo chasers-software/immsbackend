@@ -25,12 +25,12 @@ const addStudent=catchAsync(async (data,program_id,section_id,next)=>{
     //const section_code=data[0]+data[1]+getGroup_code(group);
     const params1=[username,password,full_name,role,status];
     
-    checker(params1,next);
+    checker(params1);
     
     let person_id=(await pool.execute('INSERT INTO person(username,password,full_name,role,status) '+
                       'values(?,?,?,?,?)',params1))[0].insertId;
     const params2=[person_id,section_id,program_id];
-    checker(params2,next)
+    checker(params2)
     await pool.execute('INSERT INTO student(person_id,section_id,program_id) values(?,?,?)',params2);
 
 })
@@ -43,13 +43,16 @@ const studentFetcher=catchAsync(async (obj,section_id,group,next)=>{
     params.append('group', group);
     console.log(params);
     const fetchedData=(await axios.post(process.env.studentURL,params)).data;
+    const syllabus=(
+      await pool.execute('SELECT subject.subject_id,theory_fm,practical_fm FROM subject_in_program '+
+                         'LEFT JOIN subject ON subject.subject_id=subject_in_program.subject_id'))[0];
     for (let data of fetchedData)
     {
        await addStudent(data,program_id,section_id,next);
     }   
 });
 const fillMarks=catchAsync(async (section_id,program_id,next)=>{
-    checker([section_id],next);
+    checker([section_id]);
     const students=(await pool.execute('SELECT person_id from student WHERE section_id=?',[section_id]))[0];
     console.log("Students:",students);
     const subjectInPrograms=(await pool.execute('SELECT subject_id,semester FROM subject_in_program where program_id=?',[program_id]))[0];

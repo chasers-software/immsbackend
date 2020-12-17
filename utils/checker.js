@@ -1,5 +1,4 @@
-const AppError=require('./../utils/appError');
-module.exports=(arr,next)=>{
+module.exports=(arr)=>{
     //console.log("Arr is:",arr);
     let tarr=[...arr];
     tarr.forEach(val=>{

@@ -15,7 +15,7 @@ exports.getAllNotification=catchAsync(async (req,res,next)=>{
 });
 exports.addNotification=catchAsync(async (req,res,next)=>{
     let {notification_name}=req.body;
-    checker([notification_name],next);
+    checker([notification_name]);
     await pool.execute('INSERT INTO notification(notification_name) values(?)',[notification_name]);
     res.status(200).json({
         status:'success',

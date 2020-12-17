@@ -6,7 +6,7 @@ const checker=require('../utils/checker');
 const {studentFetcher,fillMarks}=require('./../utils/studentsFetch');
 exports.addSection=catchAsync(async (req,res,next)=>{
     const {batch_id,program_id}=req.body;
-    checker([batch_id,program_id],next);
+    checker([batch_id,program_id]);
     let result1=(await pool.execute('SELECT batch_id,batch_code FROM batch WHERE batch_id=?',[batch_id]))[0];
     let result2=(await pool.execute('SELECT program_id,program_code FROM program WHERE PROGRAM_ID=?',[program_id]))[0];
     if (result1.length==0 || result2.length==0) return next(new AppError("The program or batch doesnt exist"),400);
@@ -25,7 +25,7 @@ exports.addSection=catchAsync(async (req,res,next)=>{
     
     let section_code=batch_code+program_code+group1+group2;
     console.log("SEC:",section_code);
-    checker([section_code,batch_id,program_id],next);
+    checker([section_code,batch_id,program_id]);
     let section_id=(await pool.execute(
     'INSERT INTO section(section_code,batch_id,program_id) VALUES(?,?,?)',[section_code,batch_id,program_id]))[0].insertId;
     console.log("Groups:",group1,group2);
@@ -46,7 +46,7 @@ exports.getSection=catchAsync(async(req,res,next)=>{
 exports.getAllSection=catchAsync(async(req,res,next)=>{
     const {batch_id,program_id}=req.query;
     const params1=[batch_id*1,program_id*1];
-    checker(params1,next);
+    checker(params1);
     const result1=(await pool.execute('SELECT * FROM section WHERE batch_id=? and program_id=?',params1))[0];
     res.status(200).json({
         status:'success',
@@ -83,6 +83,18 @@ exports.addLecture=catchAsync(async(req,res,next)=>{
     console.log(req.body);
     const params=[person_id,section_id,subject_id];
     const result=await pool.execute('INSERT INTO lecture(person_id,section_id,subject_id) VALUES (?,?,?)',params);
+    console.log(result);
+    return res.status(200).json({
+        status:'success'
+    }
+    );
+})
+exports.deleteLecture=catchAsync(async(req,res,next)=>{
+    const {lecture_id}=req.params;
+    let params=[lecture_id];
+    //console.log(req.body);
+    //const params=[person_id,section_id,subject_id];
+    const result=await pool.execute('DELETE FROM lecture WHERE lecture_id=?',params);
     console.log(result);
     return res.status(200).json({
         status:'success'

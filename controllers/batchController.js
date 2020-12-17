@@ -6,7 +6,7 @@ const checker = require('../utils/checker');
 exports.addBatch=catchAsync(async (req,res,next)=>{
     const {batch_code,semester}=req.body;
     let params1=[batch_code,semester];
-    checker(params1,next);
+    checker(params1);
     const result=(await pool.execute('SQL',params1))[0];
     res.status(400).json({
         status:'success'
