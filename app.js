@@ -25,10 +25,7 @@ const app=express();
 app.use(express.static(path.join(__dirname, 'build')));
 
 
-let corsOptions={
-    credentials:true
-}
-app.use(cors(corsOptions))
+app.use(cors())
 app.use(helmet());
 app.use(requestIp.mw());
 if (process.env.NODE_ENV==='development'){
@@ -36,7 +33,7 @@ if (process.env.NODE_ENV==='development'){
 }
 
 const limiter=rateLimit({
-    max:100,
+    max:1000,
     windowMs:60*60*1000,
     message:'Too many requests from this IP, please try later'
 });

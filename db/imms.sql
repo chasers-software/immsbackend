@@ -82,6 +82,7 @@ CREATE TABLE student
     person_id int NOT NULL PRIMARY KEY AUTO_INCREMENT,
     section_id smallint NOT NULL,
     program_id tinyint NOT NULL,
+    batch_id tinyint NOT NULL,
     FOREIGN KEY(person_id) references person(person_id),
     FOREIGN KEY(section_id) references section(section_id),
     FOREIGN KEY(program_id) references program(program_id)
@@ -119,10 +120,12 @@ CREATE TABLE lecture
     marks_entered tinyint NOT NULL DEFAULT 0,
     marks_submission_date DATE,
     assessment_date DATE,
-    avg_marks tinyint DEFAULT 0,
-    total_pass tinyint DEFAULT 0,
-    total_fail tinyint DEFAULT 0,
+    avg_theory tinyint DEFAULT 0,
+    avg_practical tinyint DEFAULT 0,
+    total_theory_pass tinyint DEFAULT 0,
+    total_practical_pass tinyint DEFAULT 0,
     created_at datetime DEFAULT CURRENT_TIMESTAMP,
+    status tinyint DEFAULT 1,
     UNIQUE KEY(person_id,section_id,subject_id),
     FOREIGN KEY(person_id) references teacher(person_id),
     FOREIGN KEY(section_id) references section(section_id),
@@ -144,7 +147,7 @@ CREATE TABLE notification
     id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,
     sender_id int NOT NULL,
     receiver_id int NOT NULL,
-    subject_id int NOT NULL,
+    subject_id smallint NOT NULL,
     message varchar(500),
     type tinyint NOT NULL DEFAULT 0,
     status tinyint NOT NULL DEFAULT 0,
@@ -204,4 +207,5 @@ VALUES("BCT","Bachelor of Computer Engineering","Department of Electronics and C
 INSERT INTO dept(dept_name)
 values("Department of Electronics and Computer Engineering"),
 	("Department of Civil Engineering"),
-    ("Department of Mechanical Engineering");
+    ("Department of Mechanical Engineering"),
+    ("Department of Electrical Engineering");

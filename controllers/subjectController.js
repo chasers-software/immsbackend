@@ -26,7 +26,7 @@ dotenv.config({ path: './../config.env' });
 // });
 exports.addSubjects=catchAsync(async (req,res,next)=>{
     const programs=(await pool.execute('Select * FROM program'))[0];
-    //console.log("Adding Subjects in Programs:",programs);
+    console.log("Adding Subjects in Programs:",programs);
     for (let program of programs)
     {
         const params = new URLSearchParams();
@@ -40,7 +40,7 @@ exports.addSubjects=catchAsync(async (req,res,next)=>{
                 params.append('year', year);
                 params.append('part', part);
                 const fetchedData=(await axios.post(process.env.subjectURL,params)).data;
-                //console.log("Fetched Data:",fetchedData);
+                console.log("Fetched Data:",fetchedData);
                 for (let data of fetchedData)
                 {
                     let params1=[...data];

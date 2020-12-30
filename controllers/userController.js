@@ -14,7 +14,7 @@ exports.addTeacher=catchAsync(async(req,res,next)=>{
     //console.log(params1,"\n",params2);
     const result=(await pool.execute('SELECT person_id FROM person WHERE username=?',[username]))[0];
     if (result.length!=0)
-        {return next(new AppError('Username already exists',400));}
+        {return next(new AppError('Username already exists',409));}
     let person_id=(await pool.execute('INSERT INTO person(username,password,full_name,email,phone_no,role,status) values(?,?,?,?,?,?,?)',params1))[0].insertId;
     const params2=[person_id,dept_id];
     checker(params2);
@@ -27,7 +27,7 @@ exports.addTeacher=catchAsync(async(req,res,next)=>{
 exports.getTeachers=catchAsync(async(req,res,next)=>{
     const result=(await pool.execute('SELECT * FROM teacher '+
     'LEFT JOIN person ON person.person_id=teacher.person_id '+
-    'LEFT JOIN dept on teacher.dept_id=dept.dept_id'
+    'LEFT JOIN dept on teacher.dept_id=dept.dept_id WHERE person.status=1'
     ))[0];
     result.forEach(el=>
         {
@@ -43,7 +43,7 @@ exports.getAllStudent=catchAsync(async(req,res,next)=>{
     let result;
     if (username)
     {
-        result=(await pool.execute('SELECT * FROM person WHERE username=?',[username]))[0][0];
+        result=(await pool.execute('SELECT * FROM person WHERE username=? AND status=1',[username]))[0][0];
         result.password=undefined;
     }
     else
@@ -67,11 +67,12 @@ exports.getTeacher=catchAsync(async(req,res,next)=>{
     const result=(await pool.execute('SELECT * FROM teacher '+
     'LEFT JOIN person ON person.person_id=teacher.person_id '+
     'LEFT JOIN dept on teacher.dept_id=dept.dept_id ' +
-    'WHERE teacher.person_id=?',[person_id]
+    'WHERE teacher.person_id=? AND person.status=1',[person_id]
     ))[0];
-    result[0].password=undefined;
+    
     if (result.length==0)
         return next(new AppError('The user doesnt exist',400));
+    result[0].password=undefined;
     res.status(200).json({
         status:'success',
         data:result[0]
@@ -79,12 +80,13 @@ exports.getTeacher=catchAsync(async(req,res,next)=>{
 })
 exports.updateTeacher=catchAsync(async(req,res,next)=>{
     const {person_id}=req.params;
-    const {full_name,email,phone_no,dept_id}=req.body;
-    const params=[full_name,email,phone_no,person_id];
+    const {username,full_name,email,phone_no,dept_id}=req.body;
+    const params=[username,full_name,email,phone_no,person_id];
     checker(params);
-    await pool.execute('UPDATE person SET full_name=?,email=?,phone_no=? WHERE person_id=?',params);
-    checker([dept_id,person_id]);
-    await pool.execute('UPDATE teacher SET dept_id=? WHERE person_id=?',[dept_id,person_id])
+    await pool.execute('UPDATE person SET username=?,full_name=?,email=?,phone_no=? WHERE person_id=?',params);
+    let teacherValues=[dept_id,person_id]
+    checker(teacherValues);
+    await pool.execute('UPDATE teacher SET dept_id=? WHERE person_id=?',teacherValues);
     res.status(200).json({
         status:'success'
     })

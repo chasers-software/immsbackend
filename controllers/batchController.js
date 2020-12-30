@@ -64,8 +64,8 @@ exports.addBatch=catchAsync(async (req,res,next)=>{
                     'INSERT INTO person(username,password,full_name,role,status) '+
                     'VALUES(?,?,?,?,?)',personValues
                 ))[0].insertId;
-                const studentValues=[person_id,section_id,program.program_id];
-                await pool.execute('INSERT INTO student(person_id,section_id,program_id) values(?,?,?)',studentValues);
+                const studentValues=[person_id,section_id,program.program_id,batch_id];
+                await pool.execute('INSERT INTO student(person_id,section_id,program_id,batch_id) values(?,?,?,?)',studentValues);
                 for (let subject of subjectInPrograms)
                 {
                     let m1=Math.abs((Math.floor(Math.random()*1000))%20);
@@ -80,7 +80,7 @@ exports.addBatch=catchAsync(async (req,res,next)=>{
 
         }
     }
-    res.status(400).json({
+    res.status(200).json({
         status:'success'
     })
 });
@@ -89,6 +89,39 @@ exports.getAllBatch=catchAsync(async(req,res,next)=>{
     res.status(200).json({
         status:'success',
         data:result
+    })
+})
+exports.newSession=catchAsync(async(req,res,next)=>{
+    await pool.execute('UPDATE batch SET semester=semester+1');
+    const finalbatch=(await pool.execute('SELECT * FROM batch WHERE semester=9'))[0];
+    if (finalbatch.length!=0){
+        for(let batch of finalbatch)
+        {
+            let updateValues=[batch.batch_id];
+            checker(updateValues);
+            await pool.execute(
+                'UPDATE person '+
+                'INNER JOIN student ON person.person_id=student.person_id '+
+                'SET status=0 WHERE batch_id=?',
+                updateValues
+            )
+        }
+    }
+    await pool.execute('UPDATE lecture SET status=0');
+    res.status(200).json({
+        status:'success',
+        msg:"New session started!"
+    })
+})
+exports.getStats=catchAsync(async(req,res,next)=>{
+    const teacherCount=(await pool.execute('SELECT COUNT(*) AS total FROM person WHERE role=1 AND status=1'))[0][0].total;
+    const studentCount=(await pool.execute('SELECT COUNT(*) AS total FROM person WHERE role=2 AND status=1'))[0][0].total;
+    res.status(200).json({
+        status:'success',
+        data:{
+            teachers:teacherCount,
+            students:studentCount
+        }
     })
 })
 

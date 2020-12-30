@@ -18,4 +18,8 @@ router
     .route('/lecture/report/:lecture_id')
     .get(marksController.getMarksReport);
 
+router
+    .route('/deadline')
+    .get(marksController.getSubmissionDate)
+    .post(marksController.setSubmissionDate);
 module.exports=router;

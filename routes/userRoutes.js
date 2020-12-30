@@ -7,11 +7,15 @@ const router = express.Router();
 //router.post('/signup', authController.signup);
 router.post('/login', authController.login);
 router.get('/logout', authController.logout);
-router.use(authController.protect);
+//router.use(authController.protect);
 
+router.route('/teacher/delete/:person_id')
+    .patch(userController.deleteTeacher);
+    
 router.route('/teacher/:person_id')
     .get(userController.getTeacher)
     .patch(userController.updateTeacher);
+
 router.route('/teacher')
     .post(userController.addTeacher)
     .get(userController.getTeachers);
