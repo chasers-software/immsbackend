@@ -1,28 +1,31 @@
 {
   "files": {
-    "main.css": "/static/css/main.efaffdbf.chunk.css",
-    "main.js": "/static/js/main.834fcff9.chunk.js",
-    "main.js.map": "/static/js/main.834fcff9.chunk.js.map",
+    "main.css": "/static/css/main.89f75edc.chunk.css",
+    "main.js": "/static/js/main.282567bf.chunk.js",
+    "main.js.map": "/static/js/main.282567bf.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.4b030343.js",
     "runtime-main.js.map": "/static/js/runtime-main.4b030343.js.map",
     "static/css/2.b8ba86af.chunk.css": "/static/css/2.b8ba86af.chunk.css",
-    "static/js/2.76a49e07.chunk.js": "/static/js/2.76a49e07.chunk.js",
-    "static/js/2.76a49e07.chunk.js.map": "/static/js/2.76a49e07.chunk.js.map",
+    "static/js/2.ab2d778f.chunk.js": "/static/js/2.ab2d778f.chunk.js",
+    "static/js/2.ab2d778f.chunk.js.map": "/static/js/2.ab2d778f.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.91bf39451970a4098990629b701fffba.js": "/precache-manifest.91bf39451970a4098990629b701fffba.js",
+    "precache-manifest.533c041264ec1fd5d3e5b6943fe921fd.js": "/precache-manifest.533c041264ec1fd5d3e5b6943fe921fd.js",
     "service-worker.js": "/service-worker.js",
     "static/css/2.b8ba86af.chunk.css.map": "/static/css/2.b8ba86af.chunk.css.map",
-    "static/css/main.efaffdbf.chunk.css.map": "/static/css/main.efaffdbf.chunk.css.map",
-    "static/js/2.76a49e07.chunk.js.LICENSE.txt": "/static/js/2.76a49e07.chunk.js.LICENSE.txt",
+    "static/css/main.89f75edc.chunk.css.map": "/static/css/main.89f75edc.chunk.css.map",
+    "static/js/2.ab2d778f.chunk.js.LICENSE.txt": "/static/js/2.ab2d778f.chunk.js.LICENSE.txt",
+    "static/media/Profile-6.jpg": "/static/media/Profile-6.d898415e.jpg",
+    "static/media/Login.scss": "/static/media/bgR.a7534c3a.jpg",
     "static/media/primereact.min.css": "/static/media/color.c7a33805.png",
+    "static/media/pcampus.jpg": "/static/media/pcampus.328e3389.jpg",
     "static/media/primeicons.css": "/static/media/primeicons.79432094.woff",
     "static/media/tulogo.png": "/static/media/tulogo.838d6952.png"
   },
   "entrypoints": [
     "static/js/runtime-main.4b030343.js",
     "static/css/2.b8ba86af.chunk.css",
-    "static/js/2.76a49e07.chunk.js",
-    "static/css/main.efaffdbf.chunk.css",
-    "static/js/main.834fcff9.chunk.js"
+    "static/js/2.ab2d778f.chunk.js",
+    "static/css/main.89f75edc.chunk.css",
+    "static/js/main.282567bf.chunk.js"
   ]
 }
