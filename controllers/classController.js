@@ -3,6 +3,7 @@ const pool=require('./../db/dbConnection');
 const catchAsync=require('./../utils/catchAsync');
 const AppError=require('./../utils/appError');
 const checker=require('../utils/checker');
+
 const {studentFetcher,fillMarks}=require('./../utils/studentsFetch');
 exports.addSection=catchAsync(async (req,res,next)=>{
     const {batch_id,program_id}=req.body;
@@ -31,7 +32,7 @@ exports.addSection=catchAsync(async (req,res,next)=>{
     console.log("Groups:",group1,group2);
     await studentFetcher({batch_code,program_code,batch_id,program_id},section_id,group1,next);
     await studentFetcher({batch_code,program_code,batch_id,program_id},section_id,group2,next);
-    await fillMarks(section_id,program_id,next);
+    //await fillMarks(section_id,program_id,next);
     res.status(200).json({
         status:'success'
     })

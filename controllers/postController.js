@@ -39,6 +39,7 @@ exports.addPost=catchAsync(async (req,res,next)=>{
     //let {}=req.body;
     //checker([post_name]);
     const {person_id,section_id,content}=req.body;
+    console.log(req.body);
     let params=[person_id,section_id,content];
     await pool.execute('INSERT INTO post(person_id,section_id,content) values(?,?,?)',params);
     res.status(200).json({

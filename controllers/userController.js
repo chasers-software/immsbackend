@@ -3,13 +3,9 @@ const pool=require('./../db/dbConnection');
 const catchAsync=require('./../utils/catchAsync');
 const AppError=require('./../utils/appError');
 const checker = require('../utils/checker');
+
 exports.addTeacher=catchAsync(async(req,res,next)=>{
     let {username,password,full_name,email,phone_no,dept_id}=req.body;
-    if(!username)
-    {
-        username=dept_id+full_name.split(' ')[0]
-    }
-
     password="abcdef";
     const params1=[username,password,full_name,email,phone_no,1,1];
     
@@ -89,6 +85,15 @@ exports.updateTeacher=catchAsync(async(req,res,next)=>{
     await pool.execute('UPDATE person SET full_name=?,email=?,phone_no=? WHERE person_id=?',params);
     checker([dept_id,person_id]);
     await pool.execute('UPDATE teacher SET dept_id=? WHERE person_id=?',[dept_id,person_id])
+    res.status(200).json({
+        status:'success'
+    })
+})
+exports.deleteTeacher=catchAsync(async(req,res,next)=>{
+    const {person_id}=req.params;
+    const params=[person_id];
+    checker(params);
+    await pool.execute('UPDATE person SET status=0 WHERE person_id=?',params);
     res.status(200).json({
         status:'success'
     })

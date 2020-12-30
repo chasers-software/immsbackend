@@ -1,7 +1,7 @@
 module.exports=(arr)=>{
     //console.log("Arr is:",arr);
-    let tarr=[...arr];
-    tarr.forEach(val=>{
-        if(val==undefined) {val=null}
-    })
+    for (let i=0;i<arr.length;i++)
+    {
+        if (arr[i]==undefined) arr[i]=0;
+    }
 }

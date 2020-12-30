@@ -13,7 +13,7 @@ exports.addProgram=catchAsync(async (req,res,next)=>{
     checker(params1);
     const result=(await pool.execute('INSERT INTO program(program_code,program_name,program_dept,program_degree) VALUES(?,?,?,?)',params1))[0];
     console.log("Inserting Program:",result);
-    await addSubToProg(program_code,result.insertId,next);
+    addSubToProg(program_code,result.insertId,next);
     res.status(400).json({
         status:'success'
     })

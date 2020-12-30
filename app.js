@@ -42,6 +42,8 @@ const limiter=rateLimit({
 });
 app.use('/api',limiter);
 app.use(express.json({limit:'10kb'}));
+app.use(cookieParser());
+
 app.use((req,res,next)=>{
     res.setHeader('Access-Control-Allow-Origin','*');
     res.setHeader('Access-Control-Allow-Methods','GET, POST, PUT, PATCH, DELETE');

@@ -9,7 +9,7 @@ CREATE TABLE person
     full_name varchar(50) NOT NULL,
     email varchar(50),
     phone_no varchar(20),
-    avatar 
+    avatar varchar(500),
     role tinyint NOT NULL DEFAULT 2,
     status tinyint NOT NULL DEFAULT 1,
     created_at datetime DEFAULT CURRENT_TIMESTAMP
@@ -30,7 +30,8 @@ CREATE TABLE program
     program_code varchar(10) NOT NULL UNIQUE,
     program_name varchar(100) NOT NULL,
     program_dept varchar(100) NOT NULL,
-    program_degree varchar(50) NOT NULL
+    program_degree varchar(50) NOT NULL,
+    sections tinyint DEFAULT 1
 );
 CREATE TABLE dept
 (
@@ -118,6 +119,9 @@ CREATE TABLE lecture
     marks_entered tinyint NOT NULL DEFAULT 0,
     marks_submission_date DATE,
     assessment_date DATE,
+    avg_marks tinyint DEFAULT 0,
+    total_pass tinyint DEFAULT 0,
+    total_fail tinyint DEFAULT 0,
     created_at datetime DEFAULT CURRENT_TIMESTAMP,
     UNIQUE KEY(person_id,section_id,subject_id),
     FOREIGN KEY(person_id) references teacher(person_id),
@@ -189,7 +193,15 @@ CREATE TABLE logs
     FOREIGN KEY(teacher_id) references person(person_id),
     FOREIGN KEY(student_id) references person(person_id)
 );
-INSERT INTO batch(batch_code,semester) VALUES("074",7);
 INSERT INTO person(username,password,full_name,email,phone_no,role,status) 
 values("a1","abcdef","Admin One","a1@abc.com","9849657135",0,1);
 INSERT INTO admin(person_id) values(1);
+INSERT INTO program(program_code,program_name,program_dept,program_degree,sections)
+VALUES("BCT","Bachelor of Computer Engineering","Department of Electronics and Computer Engineering","Bachelor",2),
+    ("BCE","Bachelor of Civil Engineering","Department of Civil Engineering","Bachelor",4),
+    ("BME","Bachelor of Mechanical Engineering","Department of Mechanical Engineering","Bachelor",1),
+    ("BEX","Bachelor of Electronics Engineering","Department of Electronics and Computer Engineering","Bachelor",1);
+INSERT INTO dept(dept_name)
+values("Department of Electronics and Computer Engineering"),
+	("Department of Civil Engineering"),
+    ("Department of Mechanical Engineering");
