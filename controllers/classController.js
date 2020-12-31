@@ -4,39 +4,38 @@ const catchAsync=require('./../utils/catchAsync');
 const AppError=require('./../utils/appError');
 const checker=require('../utils/checker');
 
-const {studentFetcher,fillMarks}=require('./../utils/studentsFetch');
-exports.addSection=catchAsync(async (req,res,next)=>{
-    const {batch_id,program_id}=req.body;
-    checker([batch_id,program_id]);
-    let result1=(await pool.execute('SELECT batch_id,batch_code FROM batch WHERE batch_id=?',[batch_id]))[0];
-    let result2=(await pool.execute('SELECT program_id,program_code FROM program WHERE PROGRAM_ID=?',[program_id]))[0];
-    if (result1.length==0 || result2.length==0) return next(new AppError("The program or batch doesnt exist"),400);
-    const batch_code=result1[0].batch_code;
-    const program_code=result2[0].program_code;
+// exports.addSection=catchAsync(async (req,res,next)=>{
+//     const {batch_id,program_id}=req.body;
+//     checker([batch_id,program_id]);
+//     let result1=(await pool.execute('SELECT batch_id,batch_code FROM batch WHERE batch_id=?',[batch_id]))[0];
+//     let result2=(await pool.execute('SELECT program_id,program_code FROM program WHERE PROGRAM_ID=?',[program_id]))[0];
+//     if (result1.length==0 || result2.length==0) return next(new AppError("The program or batch doesnt exist"),400);
+//     const batch_code=result1[0].batch_code;
+//     const program_code=result2[0].program_code;
 
-    let result3=(await pool.execute('SELECT COUNT(*) AS count FROM section WHERE batch_id=? AND program_id=?',[batch_id,program_id]))[0];
-    let group1,group2;
-    let count=result3[0].count;
-    console.log("Count:",count);
-    if (count==0) {group1='A';group2='B';}
-    else if (count==1) {group1='C';group2='D';}
-    else if (count==2) {group1='E';group2='F';}
-    else if (count==3) {group1='G';group2='H';}
-    else {group1='I',group2='J'}
+//     let result3=(await pool.execute('SELECT COUNT(*) AS count FROM section WHERE batch_id=? AND program_id=?',[batch_id,program_id]))[0];
+//     let group1,group2;
+//     let count=result3[0].count;
+//     console.log("Count:",count);
+//     if (count==0) {group1='A';group2='B';}
+//     else if (count==1) {group1='C';group2='D';}
+//     else if (count==2) {group1='E';group2='F';}
+//     else if (count==3) {group1='G';group2='H';}
+//     else {group1='I',group2='J'}
     
-    let section_code=batch_code+program_code+group1+group2;
-    console.log("SEC:",section_code);
-    checker([section_code,batch_id,program_id]);
-    let section_id=(await pool.execute(
-    'INSERT INTO section(section_code,batch_id,program_id) VALUES(?,?,?)',[section_code,batch_id,program_id]))[0].insertId;
-    console.log("Groups:",group1,group2);
-    await studentFetcher({batch_code,program_code,batch_id,program_id},section_id,group1,next);
-    await studentFetcher({batch_code,program_code,batch_id,program_id},section_id,group2,next);
-    //await fillMarks(section_id,program_id,next);
-    res.status(200).json({
-        status:'success'
-    })
-})
+//     let section_code=batch_code+program_code+group1+group2;
+//     console.log("SEC:",section_code);
+//     checker([section_code,batch_id,program_id]);
+//     let section_id=(await pool.execute(
+//     'INSERT INTO section(section_code,batch_id,program_id) VALUES(?,?,?)',[section_code,batch_id,program_id]))[0].insertId;
+//     console.log("Groups:",group1,group2);
+//     await studentFetcher({batch_code,program_code,batch_id,program_id},section_id,group1,next);
+//     await studentFetcher({batch_code,program_code,batch_id,program_id},section_id,group2,next);
+//     //await fillMarks(section_id,program_id,next);
+//     res.status(200).json({
+//         status:'success'
+//     })
+// })
 exports.getSection=catchAsync(async(req,res,next)=>{
     const result=(await pool.execute('SELECT * FROM section'))[0];
     res.status(200).json({
@@ -72,7 +71,7 @@ exports.getLectureClass=catchAsync(async(req,res,next)=>{
 
     const {person_id}=req.query;
     const results=(await pool.execute(
-        'SELECT * FROM lecture LEFT JOIN subject ON lecture.subject_id=subject.subject_id LEFT JOIN section ON lecture.section_id=section.section_id WHERE person_id=?',[person_id]))[0];
+        'SELECT * FROM lecture LEFT JOIN subject ON lecture.subject_id=subject.subject_id LEFT JOIN section ON lecture.section_id=section.section_id WHERE person_id=? AND lecture.status=1',[person_id]))[0];
     return res.status(200).json({
         status:'success',
         data:results
@@ -95,8 +94,8 @@ exports.deleteLecture=catchAsync(async(req,res,next)=>{
     let params=[lecture_id];
     //console.log(req.body);
     //const params=[person_id,section_id,subject_id];
-    const result=await pool.execute('DELETE FROM lecture WHERE lecture_id=?',params);
-    console.log(result);
+    const result=await pool.execute('UPDATE lecture SET status=0 WHERE lecture_id=?',params);
+    
     return res.status(200).json({
         status:'success'
     }

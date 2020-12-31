@@ -3,11 +3,16 @@ const pool=require('./../db/dbConnection');
 const catchAsync=require('./../utils/catchAsync');
 const AppError=require('./../utils/appError');
 const checker = require('../utils/checker');
-
+const bcrypt=require('bcryptjs');
+const generator = require('generate-password');
 exports.addTeacher=catchAsync(async(req,res,next)=>{
-    let {username,password,full_name,email,phone_no,dept_id}=req.body;
-    password="abcdef";
-    const params1=[username,password,full_name,email,phone_no,1,1];
+    let {username,full_name,email,phone_no,dept_id}=req.body;
+    let password=generator.generate({
+        length:8,
+        numbers:true
+    });
+    let hashedPassword=await bcrypt.hash(password,12);
+    const params1=[username,hashedPassword,full_name,email,phone_no,1,1];
     
     checker(params1);
     
@@ -21,7 +26,8 @@ exports.addTeacher=catchAsync(async(req,res,next)=>{
     await pool.execute('INSERT INTO teacher(person_id,dept_id) values(?,?)',params2);
     res.status(200).json({
         status:'success',
-        msg:"User added successfully"
+        msg:"User added successfully",
+        password
     })
 })
 exports.getTeachers=catchAsync(async(req,res,next)=>{

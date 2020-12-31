@@ -5,8 +5,8 @@ const checker=require('../utils/checker');
 const catchAsync=require('../utils/catchAsync');
 const toArabic=require('roman-numerals').toArabic;
 const axios=require('axios');
-const dotenv = require('dotenv');
-dotenv.config({ path: './../config.env' });
+//const dotenv = require('dotenv');
+//dotenv.config({ path: './../config.env' });
 
 // exports.addSubject=catchAsync(async (req,res,next)=>{
     

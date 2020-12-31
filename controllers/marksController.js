@@ -70,7 +70,7 @@ exports.assignMarks=catchAsync(async(req,res,next)=>{
         'WHERE section_id=1 AND marks.subject_id=1 AND practical_marks>=pass_percentage/100*practical_fm'
     ))[0][0].count;
     console.log(average,count1,count2);
-    (await pool.execute('UPDATE lecture SET avg_theory=?, avg_practical=?,total_theory_pass=?,total_practical_pass=? WHERE lecture_id=?',[average.average_theory,average.average_practical,count1,count2,lecture_id]))
+    (await pool.execute('UPDATE lecture SET avg_theory=?, avg_practical=?,total_theory_pass=?,total_practical_pass=?,marks_entered=1 WHERE lecture_id=?',[average.average_theory,average.average_practical,count1,count2,lecture_id]))
     return res.status(200).json({
         status:'success',
         msg:"Data entered"
@@ -185,7 +185,12 @@ exports.setSubmissionDate=catchAsync(async(req,res,next)=>{
 })
 exports.getSubmissionDate=catchAsync(async(req,res,next)=>{
     //let lectureValues=[deadline];
-    let deadline=(await pool.execute('SELECT marks_submission_date FROM lecture WHERE status=1'))[0][0].marks_submission_date;
+    let deadlineQuery=(await pool.execute('SELECT marks_submission_date FROM lecture WHERE status=1'))[0];
+    if (deadlineQuery.length==0)
+    {
+        return next(new AppError("Deadline has not been set",400));
+    }
+    let deadline=deadlineQuery[0].marks_submission_date;
 
     res.status(200).json({
         status:'success',

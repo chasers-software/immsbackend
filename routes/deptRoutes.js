@@ -3,9 +3,10 @@ const deptController=require('../controllers/deptController');
 const authController=require('../controllers/authController');
 
 const router=express.Router();
+router.use(authController.protect);
 
 router
     .route('/')
-    .post(deptController.addDept)
+    .post(authController.restrictTo(0),deptController.addDept)
     .get(deptController.getAllDept);
 module.exports=router;

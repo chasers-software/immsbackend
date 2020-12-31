@@ -4,6 +4,7 @@ const authController=require('../controllers/authController');
 
 
 const router=express.Router();
+router.use(authController.protect);
 
 router
     .route('/student/')
@@ -11,7 +12,7 @@ router
 
 router
     .route('/lecture/:lecture_id')
-    .post(marksController.assignMarks)
+    .post(authController.restrictTo(0,1),marksController.assignMarks)
     .get(marksController.getMarks);
 
 router

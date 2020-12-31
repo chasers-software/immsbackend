@@ -1,36 +1,32 @@
 const mysql=require('mysql2/promise');
+const dotenv=require('dotenv');
+dotenv.config({path:'./'});
+console.log()
 const pool=require('./../db/dbConnection');
 const Apperror=require('./../utils/appError');
 const catchAsync=require('./../utils/catchAsync');
 const axios=require('axios');
-const dotenv = require('dotenv');
+//const dotenv = require('dotenv');
 const toArabic=require('roman-numerals').toArabic;
-dotenv.config({ path: './../config.env' });
-const section_code="074BCTAB";
-const params = new URLSearchParams();
-params.append('prog',"BCT");
-params.append('year', 4);
-params.append('part', 2);
-axios.post("http://pcampus.edu.np/api/subjects/",params).then(data=>
-    {
-        console.log(data.data);
-        
-    }).catch(err=>console.log(err));
+//dotenv.config({ path: './../config.env' });
+// pool.execute('INSERT INTO dept(dept_name) values(?)',["Test Depart"]).then(d=>{
+//     console.log(d);
+// }
+// ).catch(err=>console.log(err));
+
 // pool.execute(
-//     `SELECT username,full_name FROM student JOIN person USING(username) WHERE section_code=?`,[section_code]
-// ).then(data=>{
-//     const arr=Array.from(data[0]);
-//     console.log(arr);
-// }).catch(err=>console.log(err));
-// mark={
-//     username:"074BCT002"
-// };
-// subject_code="CE401";
-// pool.execute('SELECT username FROM marks WHERE username=? AND subject_code=?',[mark.username,subject_code]).then(
-//     data=>{
-//         if (data[0].length==0){
-            
-//         }
-//     }
-// )
-// pool.execute('SELECT * FROM program').then(data=>console.log(data[0]));
+                //     'INSERT INTO person(username,password,full_name,role,status) '+
+                //     'VALUES(?,?,?,?,?)',personValues
+                // ).then(data=>{
+                //     const studentValues=[data[0].insertId,section_id,program.program_id,batch_id];
+                //     pool.execute('INSERT INTO student(person_id,section_id,program_id,batch_id) values(?,?,?,?)',studentValues);
+                //     for (let subject of subjectInPrograms)
+                //     {
+                //         let m1=Math.abs((Math.floor(Math.random()*1000))%20);
+                //         let m2=Math.abs((Math.floor(Math.random()*1000))%20);
+                //         let marksValues=[data[0].insertId,subject.subject_id,m1,m2];
+                //         checker(marksValues);
+                //         pool.execute('INSERT INTO marks(person_id,subject_id,theory_marks,practical_marks) VALUES(?,?,?,?)',marksValues);  
+                //     }
+                // })
+                

@@ -3,9 +3,39 @@ const AppError=require('../utils/appError');
 const catchAsync=require('../utils/catchAsync');
 const checker = require('../utils/checker');
 const axios=require('axios');
-const dotenv = require('dotenv');
-
-dotenv.config({ path: '../config.env' });
+const bcrypt=require('bcryptjs');
+const generator=require('generate-password')
+//const dotenv = require('dotenv');
+const addStudent=catchAsync(async(student,id,subjectInPrograms,credentials)=>{
+    const username=student[0]+student[1]+student[2];
+    const password=await generator.generate({
+        length:8,
+        numbers:true
+    })
+    credentials.push({
+        username,
+        password
+    })
+    const hashedPassword=await bcrypt.hash(password,12);
+    const full_name=student[3];
+    const personValues=[username,hashedPassword,full_name,2,1];
+    checker(personValues);
+    let person_id=(await pool.execute(
+        'INSERT INTO person(username,password,full_name,role,status) '+
+        'VALUES(?,?,?,?,?)',personValues
+    ))[0].insertId;
+    const studentValues=[person_id,id.section_id,id.program_id,id.batch_id];
+    await pool.execute('INSERT INTO student(person_id,section_id,program_id,batch_id) values(?,?,?,?)',studentValues);
+    for (let subject of subjectInPrograms)
+    {
+        let m1=Math.abs((Math.floor(Math.random()*1000))%20);
+        let m2=Math.abs((Math.floor(Math.random()*1000))%20);
+        let marksValues=[person_id,subject.subject_id,m1,m2];
+        checker(marksValues);
+        pool.execute('INSERT INTO marks(person_id,subject_id,theory_marks,practical_marks) VALUES(?,?,?,?)',marksValues);  
+    }
+})
+//dotenv.config({ path: '../config.env' });
 let getSemString=(section_no)=>
 {
     if (section_no==1) return "AB";
@@ -20,6 +50,8 @@ let getSemString=(section_no)=>
 }
 
 exports.addBatch=catchAsync(async (req,res,next)=>{
+    console.log(process.env);
+    let credentials=[];
     const {batch_code}=req.body;
     console.log(batch_code);
     let params1=[batch_code,0];
@@ -55,10 +87,23 @@ exports.addBatch=catchAsync(async (req,res,next)=>{
             const students=[...fetchedStudents1,...fetchedStudents2];
             for (let student of students)
             {
+                // addStudent(student,{
+                //     section_id,
+                //     program_id:program.program_id,
+                //     batch_id
+                // },subjectInPrograms,credentials)
                 const username=student[0]+student[1]+student[2];
-                const password="abcdef";
+                const password=await generator.generate({
+                    length:8,
+                    numbers:true
+                })
+                credentials.push({
+                    username,
+                    password
+                })
+                const hashedPassword=await bcrypt.hash(password,10);
                 const full_name=student[3];
-                const personValues=[username,password,full_name,2,1];
+                const personValues=[username,hashedPassword,full_name,2,1];
                 checker(personValues);
                 let person_id=(await pool.execute(
                     'INSERT INTO person(username,password,full_name,role,status) '+
@@ -68,20 +113,18 @@ exports.addBatch=catchAsync(async (req,res,next)=>{
                 await pool.execute('INSERT INTO student(person_id,section_id,program_id,batch_id) values(?,?,?,?)',studentValues);
                 for (let subject of subjectInPrograms)
                 {
-                    let m1=Math.abs((Math.floor(Math.random()*1000))%20);
-                    let m2=Math.abs((Math.floor(Math.random()*1000))%20);
-                    let marksValues=[person_id,subject.subject_id,m1,m2];
+                    // let m1=Math.abs((Math.floor(Math.random()*1000))%20);
+                    // let m2=Math.abs((Math.floor(Math.random()*1000))%20);
+                    let marksValues=[person_id,subject.subject_id,0,0];
                     checker(marksValues);
                     pool.execute('INSERT INTO marks(person_id,subject_id,theory_marks,practical_marks) VALUES(?,?,?,?)',marksValues);  
                 }
-
             }
-
-
         }
     }
     res.status(200).json({
-        status:'success'
+        status:'success',
+        credentials
     })
 });
 exports.getAllBatch=catchAsync(async(req,res,next)=>{
@@ -124,4 +167,5 @@ exports.getStats=catchAsync(async(req,res,next)=>{
         }
     })
 })
+
 

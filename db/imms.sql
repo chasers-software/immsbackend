@@ -53,7 +53,8 @@ CREATE TABLE batch
 (
     batch_id tinyint NOT NULL PRIMARY KEY AUTO_INCREMENT,
     batch_code varchar(5),
-    semester tinyint NOT NULL
+    semester tinyint NOT NULL,
+    deadline DATE
 );
 CREATE TABLE subject_in_program
 (
@@ -126,7 +127,7 @@ CREATE TABLE lecture
     total_practical_pass tinyint DEFAULT 0,
     created_at datetime DEFAULT CURRENT_TIMESTAMP,
     status tinyint DEFAULT 1,
-    UNIQUE KEY(person_id,section_id,subject_id),
+    UNIQUE KEY(person_id,section_id,subject_id,status),
     FOREIGN KEY(person_id) references teacher(person_id),
     FOREIGN KEY(section_id) references section(section_id),
     FOREIGN KEY(subject_id) references subject(subject_id)
@@ -197,7 +198,7 @@ CREATE TABLE logs
     FOREIGN KEY(student_id) references person(person_id)
 );
 INSERT INTO person(username,password,full_name,email,phone_no,role,status) 
-values("a1","abcdef","Admin One","a1@abc.com","9849657135",0,1);
+values("a1","$2b$12$1.E9cUM58WU4DuHxTPz9Vu/0wxJsYqDpqZFxJUxKSxuZ/kfjnTnkG","Admin One","a1@abc.com","9849657135",0,1);
 INSERT INTO admin(person_id) values(1);
 INSERT INTO program(program_code,program_name,program_dept,program_degree,sections)
 VALUES("BCT","Bachelor of Computer Engineering","Department of Electronics and Computer Engineering","Bachelor",2),

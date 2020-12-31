@@ -4,11 +4,11 @@ const Apperror=require('./../utils/appError');
 const catchAsync=require('./catchAsync');
 const AppError = require('./appError');
 const axios=require('axios');
-const dotenv = require('dotenv');
+//const dotenv = require('dotenv');
 const toArabic=require('roman-numerals').toArabic;
 const checker = require('./checker');
 
-dotenv.config({ path: './../config.env' });
+//dotenv.config({ path: './../config.env' });
 
 const addSubjectsIn=catchAsync(async (program,program_id,next)=>{
     const params = new URLSearchParams();

@@ -4,19 +4,19 @@ const authController=require('../controllers/authController');
 
 
 const router=express.Router();
+router.use(authController.protect);
 
 router
     .route('/section')
-    .post(classController.addSection)
     .get(classController.getAllSection);
 router
     .route('/students/:section_code')
     .get(classController.getSectionStudents);
 
 router.route('/lecture/:lecture_id')
-.delete(classController.deleteLecture);
+.delete(authController.restrictTo(0),classController.deleteLecture);
 
 router.route('/lecture')
-    .post(classController.addLecture)
+    .post(authController.restrictTo(0),classController.addLecture)
     .get(classController.getLectureClass);
 module.exports=router;

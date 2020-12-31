@@ -1,22 +1,21 @@
 const mysql=require('mysql2/promise');
+//const dotenv = require('dotenv');
+//dotenv.config({path:'./../config.env'});
+//console.log(process.env)
+// const pool=mysql.createPool({
+//     host:'localhost',
+//     user:'root',
+//     password:'',
+//     database:'imms',
+//     waitForConnections:true
+// });
 const pool=mysql.createPool({
-    host:'localhost',
-    user:'root',
-    password:'',
-    database:'imms',
+    host:process.env.dbhost||'localhost',
+    user:process.env.dbuser||'root',
+    password:process.env.dbpassword||'',
+    database:process.env.dbname||'imms',
     waitForConnections:true
 });
 
-// pool.on('connection',function(connection){
-    
-// })
-// pool.on('acquire',function(connection){
-    
-// });
-// pool.on('enqueue',function(){
-    
-// })
-// pool.on('release',function(connection){
-// });
 module.exports=pool;
 
