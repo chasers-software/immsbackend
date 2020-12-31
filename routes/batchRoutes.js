@@ -7,11 +7,11 @@ router.use(authController.protect);
 router
     .route('/')
     .post(authController.restrictTo(0),batchController.addBatch)
-    .get(batchController.getAllBatch);
+    .get(authController.restrictTo(0),batchController.getAllBatch);
 router
     .route('/newSession')
     .post(authController.restrictTo(0),batchController.newSession);
 router
     .route('/stats')
-    .get(batchController.getStats);
+    .get(authController.restrictTo(0),batchController.getStats);
 module.exports=router;

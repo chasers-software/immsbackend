@@ -6,7 +6,6 @@ const checker=require('../utils/checker');
 const xl=require('excel4node');
 exports.assignMarks=catchAsync(async(req,res,next)=>{
     const marks=req.body;
-    console.log(req.body);
     const {lecture_id}=req.params;
     let lectureValues=[lecture_id]
     checker(lectureValues);
@@ -15,16 +14,11 @@ exports.assignMarks=catchAsync(async(req,res,next)=>{
     {
         return next(new AppError("Lecture Doesnt exist!",400));
     }
-    console.log(lecture.marks_submission_date);
-    console.log((new Date(lecture.marks_submission_date).getTime()));
-    console.log(Date.now());
     if (Date.now()>(new Date(lecture.marks_submission_date)).getTime())
     {
         return next(new AppError("Deadline Exceeded!",400));
     }
     const {section_id,subject_id}=lecture;
-    console.log("Section Code:",section_id);
-    console.log(req.params);
     for (let mark of marks)
     {
         let input=[mark.theory_marks,mark.practical_marks,mark.person_id,subject_id];
@@ -69,7 +63,6 @@ exports.assignMarks=catchAsync(async(req,res,next)=>{
         'ON marks.subject_id=subject.subject_id '+
         'WHERE section_id=1 AND marks.subject_id=1 AND practical_marks>=pass_percentage/100*practical_fm'
     ))[0][0].count;
-    console.log(average,count1,count2);
     (await pool.execute('UPDATE lecture SET avg_theory=?, avg_practical=?,total_theory_pass=?,total_practical_pass=?,marks_entered=1 WHERE lecture_id=?',[average.average_theory,average.average_practical,count1,count2,lecture_id]))
     return res.status(200).json({
         status:'success',
@@ -81,7 +74,6 @@ exports.getMarks=catchAsync(async(req,res,next)=>{
     checker([lecture_id]);
     const lecture=(await pool.execute('SELECT * FROM lecture WHERE lecture_id=?',[lecture_id]))[0][0];
     const params=[lecture.section_id,lecture.subject_id];
-    console.log(params);
     const result1=await pool.execute(
         'SELECT person.person_id,username,full_name,theory_marks,practical_marks '+
         'From marks LEFT JOIN person ON marks.person_id=person.person_id '+
@@ -102,6 +94,7 @@ exports.getMarks=catchAsync(async(req,res,next)=>{
 exports.getSemMarks=catchAsync(async(req,res,next)=>{
     const {person_id,semester}=req.query;
     let studentValues=[person_id];
+    //if(person_id!=req.)
     checker(person_id);
     let students=(await pool.execute('SELECT * FROM student WHERE person_id=?',studentValues))[0];
     if(students.length==0)
@@ -129,7 +122,6 @@ exports.getMarksReport=catchAsync(async(req,res,next)=>{
     checker([lecture_id]);
     const lecture=(await pool.execute('SELECT * FROM lecture WHERE lecture_id=?',[lecture_id]))[0][0];
     const params=[lecture.section_id,lecture.subject_id];
-    console.log(params);
     const result1=await pool.execute(
         'SELECT person.person_id,username,full_name,theory_marks,practical_marks '+
         'From marks LEFT JOIN person ON marks.person_id=person.person_id '+

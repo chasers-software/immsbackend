@@ -50,10 +50,10 @@ let getSemString=(section_no)=>
 }
 
 exports.addBatch=catchAsync(async (req,res,next)=>{
-    console.log(process.env);
+    //console.log(process.env);
     let credentials=[];
     const {batch_code}=req.body;
-    console.log(batch_code);
+    //console.log(batch_code);
     let params1=[batch_code,0];
     checker(params1);
     let batch_id=(await pool.execute(

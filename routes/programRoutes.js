@@ -7,9 +7,9 @@ router.use(authController.protect);
 
 router
     .route('/')
-    .post(programController.addProgram)
-    .get(programController.getPrograms);
+    .post(authController.restrictTo(0),programController.addProgram)
+    .get(authController.restrictTo(0),programController.getPrograms);
 router
     .route('/subject')
-    .get(programController.getSubjectsInProgram);
+    .get(authController.restrictTo(0),programController.getSubjectsInProgram);
 module.exports=router;

@@ -13,7 +13,7 @@ router
 router
     .route('/lecture/:lecture_id')
     .post(authController.restrictTo(0,1),marksController.assignMarks)
-    .get(marksController.getMarks);
+    .get(authController.restrictTo(0,1),marksController.getMarks);
 
 router
     .route('/lecture/report/:lecture_id')

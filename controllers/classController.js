@@ -54,7 +54,7 @@ exports.getAllSection=catchAsync(async(req,res,next)=>{
     })
 })
 exports.getSectionStudents=catchAsync (async(req,res,next)=>{
-    console.log(req.params);
+    //console.log(req.params);
     const {section_id}=req.params;
     const result=(await pool.execute(
         `SELECT * FROM student LEFT JOIN person ON student.person_id=person.person_id WHERE section_id=?`,[section_id]
@@ -80,10 +80,10 @@ exports.getLectureClass=catchAsync(async(req,res,next)=>{
 
 exports.addLecture=catchAsync(async(req,res,next)=>{
     const {person_id,section_id,subject_id}=req.body;
-    console.log(req.body);
+    //console.log(req.body);
     const params=[person_id,section_id,subject_id];
     const result=await pool.execute('INSERT INTO lecture(person_id,section_id,subject_id) VALUES (?,?,?)',params);
-    console.log(result);
+    //console.log(result);
     return res.status(200).json({
         status:'success'
     }

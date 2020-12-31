@@ -8,6 +8,6 @@ router.use(authController.protect);
 
 router
     .route('/')
-    .post(postController.addPost)
-    .get(postController.getAllPost);
+    .post(authController.restrictTo(0,1,2),postController.addPost)
+    .get(authController.restrictTo(0,1,2),postController.getAllPost);
 module.exports=router;

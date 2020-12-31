@@ -6,7 +6,7 @@ const router=express.Router();
 router.use(authController.protect);
 
 router.route('/syllabus')
-    .post(subjectController.addSubjects);
+    .post(authController.restrictTo(0),subjectController.addSubjects);
 // router
 //     .route('/')
 //     .post(subjectController.addSubject);

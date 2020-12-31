@@ -106,3 +106,29 @@ exports.deleteTeacher=catchAsync(async(req,res,next)=>{
         status:'success'
     })
 })
+exports.changePassword=catchAsync(async(req,res,next)=>{
+    //console.log("Logging in from : ",req.clientIp,"\n");
+    const {person_id,old_password,new_password}=req.body;
+    if (!person_id || !old_password || !new_password ){
+        return next(new AppError('Please provide datas!',400));
+    }
+    
+    const userResult=(await pool.execute(
+        'SELECT * FROM person WHERE person_id=?',[person_id]
+        ))[0];
+    if (userResult.length==0)
+        return next(new AppError('The id is wrong!',400));
+    let user=userResult[0];
+    let correctPassword=await bcrypt.compare(old_password,user.password);
+    if(!correctPassword)
+        return next(new AppError('Password wrong',400));
+    if (user.status==0){
+        return next(new AppError("Your account has been deactivated",400));
+    }
+    let hashedPassword=await bcrypt.hash(old_password,12);
+    await pool.execute('UPDATE person SET password=? WHERE person_id=?',[hashedPassword,person_id]);
+    res.status(200).json({
+        status:'success',
+        msg:"Password reset successfully"
+    })
+})
