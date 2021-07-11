@@ -125,7 +125,7 @@ exports.changePassword=catchAsync(async(req,res,next)=>{
     if (user.status==0){
         return next(new AppError("Your account has been deactivated",400));
     }
-    let hashedPassword=await bcrypt.hash(old_password,12);
+    let hashedPassword=await bcrypt.hash(new_password,12);
     await pool.execute('UPDATE person SET password=? WHERE person_id=?',[hashedPassword,person_id]);
     res.status(200).json({
         status:'success',
