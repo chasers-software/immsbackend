@@ -7,10 +7,11 @@ const bcrypt=require('bcryptjs');
 const generator = require('generate-password');
 exports.addTeacher=catchAsync(async(req,res,next)=>{
     let {username,full_name,email,phone_no,dept_id}=req.body;
-    let password=generator.generate({
-        length:8,
-        numbers:true
-    });
+    // let password=generator.generate({
+    //     length:8,
+    //     numbers:true
+    // });
+    let password='teacher';
     let hashedPassword=await bcrypt.hash(password,12);
     const params1=[username,hashedPassword,full_name,email,phone_no,1,1];
     

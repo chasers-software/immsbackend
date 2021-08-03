@@ -8,10 +8,11 @@ const generator=require('generate-password')
 //const dotenv = require('dotenv');
 const addStudent=catchAsync(async(student,id,subjectInPrograms,credentials)=>{
     const username=student[0]+student[1]+student[2];
-    const password=await generator.generate({
-        length:8,
-        numbers:true
-    })
+    // const password=await generator.generate({
+    //     length:8,
+    //     numbers:true
+    // })
+    const password='student';
     credentials.push({
         username,
         password
@@ -93,10 +94,11 @@ exports.addBatch=catchAsync(async (req,res,next)=>{
                 //     batch_id
                 // },subjectInPrograms,credentials)
                 const username=student[0]+student[1]+student[2];
-                const password=await generator.generate({
-                    length:8,
-                    numbers:true
-                })
+                // const password=await generator.generate({
+                //     length:8,
+                //     numbers:true
+                // })
+                const password='student';
                 credentials.push({
                     username,
                     password
