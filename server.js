@@ -2,17 +2,6 @@ const mysql=require('mysql2/promise');
 const dotenv=require('dotenv');
 dotenv.config({path:'./config.env'});
 const app=require('./app');
-//const pool=require('./db/dbConnection');
-// process.on('uncaughtException',err=>{
-//     console.log('UNCAUGHT EXCEPTION!');
-//     console.log(err.name,err.message);
-    
-// });
-
-
-
-
-
 
 const port=process.env.PORT||3000;
 console.log("starting Server!");

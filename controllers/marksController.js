@@ -14,10 +14,7 @@ exports.assignMarks=catchAsync(async(req,res,next)=>{
     {
         return next(new AppError("Lecture Doesnt exist!",400));
     }
-    if (Date.now()>(new Date(lecture.marks_submission_date)).getTime())
-    {
-        return next(new AppError("Deadline Exceeded!",400));
-    }
+    
     const {section_id,subject_id}=lecture;
     for (let mark of marks)
     {
@@ -64,6 +61,7 @@ exports.assignMarks=catchAsync(async(req,res,next)=>{
         'WHERE section_id=1 AND marks.subject_id=1 AND practical_marks>=pass_percentage/100*practical_fm'
     ))[0][0].count;
     (await pool.execute('UPDATE lecture SET avg_theory=?, avg_practical=?,total_theory_pass=?,total_practical_pass=?,marks_entered=1 WHERE lecture_id=?',[average.average_theory,average.average_practical,count1,count2,lecture_id]))
+
     return res.status(200).json({
         status:'success',
         msg:"Data entered"
